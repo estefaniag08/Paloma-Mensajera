@@ -1,3 +1,27 @@
 //EMPLEADO
 insert into empleado values('12345','1023974659','Andrés Leonardo','Arias','Uribe','3174575592','990209leonardo');
 insert into empleado values('12334','1026324659','Diego Felipe','Barrera','Sandoval','3154558223','Diegofm');
+insert into empleado values('76542','1031170737','Felipe','Banguero','Ruiz','3145673321','bangueF');
+insert into empleado values('90832','1023123659','Diana Consuelo','Uribe','Hernández','31445282213','dianau2007');
+insert into empleado values('65412','1231149707','Daniel Alexander','Arias','Uribe','3435663311','alexdani13');
+
+//AGENTE
+insert into agente values('91234','Carlos','Fuentes Bravo');
+insert into agente values('43223','Camila','Perdomo Banega');
+insert into agente values('32457','Andrés Antonio','Arias García');
+insert into agente values('75463','Pilar','Arévalo Arias');
+insert into agente values('65443','María Camila','Villamizar García');
+
+//ASEGURADORA
+insert into aseguradora values('65341','Aseguradora Bolívar S.A.','4081262');
+insert into aseguradora values('90321','Martínez Aseguradora','4081974');
+insert into aseguradora values('43232','Liberty Seguros','6075632');
+insert into aseguradora values('70987','Aseguradora Solidaria','4058913');
+insert into aseguradora values('94321','Seguros Alfa S.A.','9087653');
+
+//CLIENTE
+insert into cliente values('3456122356','Hernando','Arias','Álvarez','311500943');
+insert into cliente values('9853723112','Alicia','Barrera','Álvarez','857437312');
+insert into cliente values('8737277421','Diego','Jiménez','Álvarez','3115001432');
+insert into cliente values('1236685831','Javier','Bautista','Londoño','312502943');
+insert into cliente values('3456122356','Andrés Felipe','Santos','Laguna','315505643');

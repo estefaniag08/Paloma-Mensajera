@@ -1,7 +1,9 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     25/11/2017 11:11:04 a. m.                    */
+/* Created on:     26/11/2017 4:08:48 p. m.                     */
 /*==============================================================*/
+
+
 
 
 /*==============================================================*/
@@ -108,7 +110,6 @@ create table EMPLEADO (
    APELLIDO_UNO         VARCHAR(15)          not null,
    APELLIDO_DOS         VARCHAR(15)          null,
    TELEFONO_CONTACTO_E  VARCHAR(12)          null,
-	CONTRASENA VARCHAR(50),
    constraint PK_EMPLEADO primary key (ID_EMPLEADO)
 );
 
@@ -119,6 +120,25 @@ create unique index EMPLEADO_PK on EMPLEADO (
 ID_EMPLEADO
 );
 
+/*==============================================================*/
+/* Table: EMPLEADO2                                             */
+/*==============================================================*/
+create table EMPLEADO2 (
+   ID_EMPLEADO2         INT4                 not null,
+   CEDULA_EMPLEADO      VARCHAR(15)          not null,
+   NOMBRE_EMPLEADO      VARCHAR(15)          not null,
+   APELLIDO_UNO         VARCHAR(15)          not null,
+   APELLIDO_DOS         VARCHAR(15)          null,
+   TELEFONO_CONTACTO_E  VARCHAR(12)          null,
+   constraint PK_EMPLEADO2 primary key (ID_EMPLEADO2)
+);
+
+/*==============================================================*/
+/* Index: EMPLEADO2_PK                                          */
+/*==============================================================*/
+create unique index EMPLEADO2_PK on EMPLEADO2 (
+ID_EMPLEADO2
+);
 
 /*==============================================================*/
 /* Table: GENERACION_SEGUIMIENTO                                */
@@ -246,14 +266,29 @@ CEDULA_CLIENTE
 );
 
 /*==============================================================*/
+/* Table: RURALURBANO                                           */
+/*==============================================================*/
+create table RURALURBANO (
+   ID_RURAL             CHAR(10)             not null,
+   constraint PK_RURALURBANO primary key (ID_RURAL)
+);
+
+/*==============================================================*/
+/* Index: RURALURBANO_PK                                        */
+/*==============================================================*/
+create unique index RURALURBANO_PK on RURALURBANO (
+ID_RURAL
+);
+
+/*==============================================================*/
 /* Table: SEGUIMIENTO                                           */
 /*==============================================================*/
 create table SEGUIMIENTO (
    ID_SEGUIMIENTO       INT4                 not null,
-   ID_AUXILIAR_E         INT4                 null,
+   ID_EMPLEADO2         INT4                 null,
    ID_TIPO_RESULTADO    INT4                 not null,
    ID_TIPO_PROCESO      INT4                 not null,
-   ID_MENSAJERO     INT4                 not null,
+   EMP_ID_EMPLEADO2     INT4                 not null,
    ID_AGENTE            INT4                 not null,
    ESTADO_SEGUIMIENTO   VARCHAR(20)          not null,
    constraint PK_SEGUIMIENTO primary key (ID_SEGUIMIENTO)
@@ -288,17 +323,17 @@ ID_TIPO_RESULTADO
 );
 
 /*==============================================================*/
-/* Index: HACE_SEGUIMIENTO                                      */
+/* Index: SEGUIMIENTO_AUXO                                      */
 /*==============================================================*/
-create  index HACE_SEGUIMIENTO on SEGUIMIENTO (
-ID_AUXILIAR_E
+create  index SEGUIMIENTO_AUXO on SEGUIMIENTO (
+EMP_ID_EMPLEADO2
 );
 
 /*==============================================================*/
 /* Index: MENSAJERO_FK                                          */
 /*==============================================================*/
 create  index MENSAJERO_FK on SEGUIMIENTO (
-ID_MENSAJERO
+ID_EMPLEADO2
 );
 
 /*==============================================================*/
@@ -373,9 +408,9 @@ create table ZONA (
    ID_ZONA_ENTREGA      INT4                 not null,
    ZON_ID_ZONA_ENTREGA  INT4                 null,
    ID_TIPO_ZONA         CHAR(10)             not null,
+   ID_RURAL             CHAR(10)             not null,
    LATITUD              FLOAT8               null,
    LONGITUD             FLOAT8               null,
-   URBANO               BOOL                 null,
    constraint PK_ZONA primary key (ID_ZONA_ENTREGA)
 );
 
@@ -398,6 +433,13 @@ ZON_ID_ZONA_ENTREGA
 /*==============================================================*/
 create  index TIPO_FK on ZONA (
 ID_TIPO_ZONA
+);
+
+/*==============================================================*/
+/* Index: TIPO2_FK                                              */
+/*==============================================================*/
+create  index TIPO2_FK on ZONA (
+ID_RURAL
 );
 
 alter table DETALLE_ORDEN_SERVICIO
@@ -466,13 +508,13 @@ alter table SEGUIMIENTO
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
-   add constraint FK_SEGUIMIE_HACE_SEGU_EMPLEADO foreign key (ID_AUXILIAR_E)
-      references EMPLEADO (ID_EMPLEADO)
+   add constraint FK_SEGUIMIE_HACE_SEGU_EMPLEADO foreign key (EMP_ID_EMPLEADO2)
+      references EMPLEADO2 (ID_EMPLEADO2)
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
-   add constraint FK_SEGUIMIE_MENSAJERO_EMPLEADO foreign key (ID_MENSAJERO)
-      references EMPLEADO (ID_EMPLEADO)
+   add constraint FK_SEGUIMIE_MENSAJERO_EMPLEADO foreign key (ID_EMPLEADO2)
+      references EMPLEADO2 (ID_EMPLEADO2)
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
@@ -493,5 +535,10 @@ alter table ZONA
 alter table ZONA
    add constraint FK_ZONA_TIPO_TIPO_ZON foreign key (ID_TIPO_ZONA)
       references TIPO_ZONA (ID_TIPO_ZONA)
+      on delete restrict on update restrict;
+
+alter table ZONA
+   add constraint FK_ZONA_TIPO2_RURALURB foreign key (ID_RURAL)
+      references RURALURBANO (ID_RURAL)
       on delete restrict on update restrict;
 
