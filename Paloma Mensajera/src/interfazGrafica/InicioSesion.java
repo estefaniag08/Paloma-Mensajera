@@ -2,10 +2,17 @@ package interfazGrafica;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+
+import persistencia.FacadeEmpleado;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -36,6 +43,25 @@ public class InicioSesion extends JPanel {
 		
 		btnIniciarSesin = new JButton("Iniciar Sesi\u00F3n");
 		btnIniciarSesin.setBounds(383, 304, 113, 23);
+		btnIniciarSesin.addActionListener(new ActionListener() {
+			@Override
+			//Acción del botón ingresar
+			public void actionPerformed(ActionEvent e) {
+				String id = txtIdempleado.getText().trim();
+				String contrasena = pwdContrasenaemp.getText().trim();
+				try {
+					if(FacadeEmpleado.login(id, contrasena)) {
+						JOptionPane.showMessageDialog(null, "Login exitoso");
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Datos incorrectos, revíselos por favor");
+					}
+				} catch (SQLException e1) {
+					System.out.println("Error en la conexión a la base de datos");
+					System.out.println("Error: " + e1.getMessage());
+				}
+			}
+		});
 		
 		lblContrasena = new JLabel("Contrase\u00F1a");
 		lblContrasena.setFont(new Font("Agency FB", Font.BOLD, 18));

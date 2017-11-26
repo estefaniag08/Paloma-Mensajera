@@ -1,0 +1,3 @@
+//EMPLEADO
+insert into empleado values('12345','1023974659','Andrés Leonardo','Arias','Uribe','3174575592','990209leonardo');
+insert into empleado values('12334','1026324659','Diego Felipe','Barrera','Sandoval','3154558223','Diegofm');

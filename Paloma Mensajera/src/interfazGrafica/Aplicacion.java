@@ -33,6 +33,7 @@ public class Aplicacion {
 		frame.setBounds(100, 100, 850, 530);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null);
 		
 		setDetails();
 		addToWindow();

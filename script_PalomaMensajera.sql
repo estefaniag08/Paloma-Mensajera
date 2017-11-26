@@ -108,6 +108,7 @@ create table EMPLEADO (
    APELLIDO_UNO         VARCHAR(15)          not null,
    APELLIDO_DOS         VARCHAR(15)          null,
    TELEFONO_CONTACTO_E  VARCHAR(12)          null,
+	CONTRASENA VARCHAR(50),
    constraint PK_EMPLEADO primary key (ID_EMPLEADO)
 );
 
