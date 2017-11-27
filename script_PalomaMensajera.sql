@@ -11,7 +11,7 @@
 /*==============================================================*/
 create table AGENTE (
    ID_AGENTE            INT4                 not null,
-   NOMBRE_AGENTE        VARCHAR(15)          not null,
+   NOMBRE_AGENTE        VARCHAR(30)          not null,
    TELEFONO_AGENTE      VARCHAR(12)          null,
    constraint PK_AGENTE primary key (ID_AGENTE)
 );
@@ -28,7 +28,7 @@ ID_AGENTE
 /*==============================================================*/
 create table ASEGURADORA (
    ID_ASEGURADORA       INT4                 not null,
-   NOMBRE_ASEGURADORA   VARCHAR(20)          not null,
+   NOMBRE_ASEGURADORA   VARCHAR(40)          not null,
    TELEFONO_CONTACTO    VARCHAR(12)          null,
    constraint PK_ASEGURADORA primary key (ID_ASEGURADORA)
 );
@@ -45,9 +45,9 @@ ID_ASEGURADORA
 /*==============================================================*/
 create table CLIENTE (
    CEDULA_CLIENTE       VARCHAR(15)          not null,
-   NOMBRE_CLIENTE       VARCHAR(15)          not null,
-   APELLIDO_UNO         VARCHAR(15)          not null,
-   APELLIDO_DOS         VARCHAR(15)          null,
+   NOMBRE_CLIENTE       VARCHAR(30)          not null,
+   APELLIDO_UNO         VARCHAR(30)          not null,
+   APELLIDO_DOS         VARCHAR(30)          null,
    TELEFONO_CONTACTO    VARCHAR(12)          null,
    constraint PK_CLIENTE primary key (CEDULA_CLIENTE)
 );
@@ -106,10 +106,11 @@ ID_EMBALAJE
 create table EMPLEADO (
    ID_EMPLEADO          INT4                 not null,
    CEDULA_EMPLEADO      VARCHAR(15)          not null,
-   NOMBRE_EMPLEADO      VARCHAR(15)          not null,
-   APELLIDO_UNO         VARCHAR(15)          not null,
-   APELLIDO_DOS         VARCHAR(15)          null,
+   NOMBRE_EMPLEADO      VARCHAR(35)          not null,
+   APELLIDO_UNO         VARCHAR(30)          not null,
+   APELLIDO_DOS         VARCHAR(30)          null,
    TELEFONO_CONTACTO_E  VARCHAR(12)          null,
+   CONTRASENA           VARCHAR(50)          not null,
    constraint PK_EMPLEADO primary key (ID_EMPLEADO)
 );
 
@@ -118,26 +119,6 @@ create table EMPLEADO (
 /*==============================================================*/
 create unique index EMPLEADO_PK on EMPLEADO (
 ID_EMPLEADO
-);
-
-/*==============================================================*/
-/* Table: EMPLEADO2                                             */
-/*==============================================================*/
-create table EMPLEADO2 (
-   ID_EMPLEADO2         INT4                 not null,
-   CEDULA_EMPLEADO      VARCHAR(15)          not null,
-   NOMBRE_EMPLEADO      VARCHAR(15)          not null,
-   APELLIDO_UNO         VARCHAR(15)          not null,
-   APELLIDO_DOS         VARCHAR(15)          null,
-   TELEFONO_CONTACTO_E  VARCHAR(12)          null,
-   constraint PK_EMPLEADO2 primary key (ID_EMPLEADO2)
-);
-
-/*==============================================================*/
-/* Index: EMPLEADO2_PK                                          */
-/*==============================================================*/
-create unique index EMPLEADO2_PK on EMPLEADO2 (
-ID_EMPLEADO2
 );
 
 /*==============================================================*/
@@ -285,10 +266,10 @@ ID_RURAL
 /*==============================================================*/
 create table SEGUIMIENTO (
    ID_SEGUIMIENTO       INT4                 not null,
-   ID_EMPLEADO2         INT4                 null,
+   ID_AUXILIAR_O         INT4                 null,
    ID_TIPO_RESULTADO    INT4                 not null,
    ID_TIPO_PROCESO      INT4                 not null,
-   EMP_ID_EMPLEADO2     INT4                 not null,
+   ID_MENSAJERO     INT4                 not null,
    ID_AGENTE            INT4                 not null,
    ESTADO_SEGUIMIENTO   VARCHAR(20)          not null,
    constraint PK_SEGUIMIENTO primary key (ID_SEGUIMIENTO)
@@ -326,14 +307,14 @@ ID_TIPO_RESULTADO
 /* Index: SEGUIMIENTO_AUXO                                      */
 /*==============================================================*/
 create  index SEGUIMIENTO_AUXO on SEGUIMIENTO (
-EMP_ID_EMPLEADO2
+ID_MENSAJERO
 );
 
 /*==============================================================*/
 /* Index: MENSAJERO_FK                                          */
 /*==============================================================*/
 create  index MENSAJERO_FK on SEGUIMIENTO (
-ID_EMPLEADO2
+ID_AUXILIAR_O
 );
 
 /*==============================================================*/
@@ -390,7 +371,7 @@ ID_TIPO_RESULTADO
 /*==============================================================*/
 create table TIPO_ZONA (
    ID_TIPO_ZONA         CHAR(10)             not null,
-   NOMBRE_TIPO_ZONA     CHAR(10)             not null,
+   NOMBRE_TIPO_ZONA     CHAR(30)             not null,
    constraint PK_TIPO_ZONA primary key (ID_TIPO_ZONA)
 );
 
@@ -405,35 +386,23 @@ ID_TIPO_ZONA
 /* Table: ZONA                                                  */
 /*==============================================================*/
 create table ZONA (
-   ID_ZONA_ENTREGA      INT4                 not null,
-   ZON_ID_ZONA_ENTREGA  INT4                 null,
-   ID_TIPO_ZONA         CHAR(10)             not null,
-   ID_RURAL             CHAR(10)             not null,
-   LATITUD              FLOAT8               null,
-   LONGITUD             FLOAT8               null,
-   constraint PK_ZONA primary key (ID_ZONA_ENTREGA)
+   ID_ZONA      integer                 not null,
+   ID_ZONA_SUPERIOR  integer NULL,
+   ID_TIPO_ZONA         VARCHAR(10) not null,
+   NOMBRE VARCHAR(40) NOT NULL,
+   ID_RURAL             VARCHAR(10) NULL,
+   LATITUD              VARCHAR(30)               null,
+   LONGITUD             VARCHAR(30)               null,
+   constraint PK_ZONA primary key (ID_ZONA)
 );
 
 /*==============================================================*/
 /* Index: ZONA_PK                                               */
 /*==============================================================*/
 create unique index ZONA_PK on ZONA (
-ID_ZONA_ENTREGA
+ID_ZONA
 );
 
-/*==============================================================*/
-/* Index: PERTENECE_A_FK                                        */
-/*==============================================================*/
-create  index PERTENECE_A_FK on ZONA (
-ZON_ID_ZONA_ENTREGA
-);
-
-/*==============================================================*/
-/* Index: TIPO_FK                                               */
-/*==============================================================*/
-create  index TIPO_FK on ZONA (
-ID_TIPO_ZONA
-);
 
 /*==============================================================*/
 /* Index: TIPO2_FK                                              */
@@ -489,7 +458,7 @@ alter table GUIA
 
 alter table GUIA
    add constraint FK_GUIA_ZONIFICAC_ZONA foreign key (ID_ZONA_ENTREGA)
-      references ZONA (ID_ZONA_ENTREGA)
+      references ZONA (ID_ZONA)
       on delete restrict on update restrict;
 
 alter table ORDEN_SERVICIO
@@ -508,13 +477,13 @@ alter table SEGUIMIENTO
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
-   add constraint FK_SEGUIMIE_HACE_SEGU_EMPLEADO foreign key (EMP_ID_EMPLEADO2)
-      references EMPLEADO2 (ID_EMPLEADO2)
+   add constraint FK_SEGUIMIE_HACE_SEGU_EMPLEADO foreign key (ID_AUXILIAR_O)
+      references EMPLEADO (ID_EMPLEADO)
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
-   add constraint FK_SEGUIMIE_MENSAJERO_EMPLEADO foreign key (ID_EMPLEADO2)
-      references EMPLEADO2 (ID_EMPLEADO2)
+   add constraint FK_SEGUIMIE_MENSAJERO_EMPLEADO foreign key (ID_MENSAJERO)
+      references EMPLEADO (ID_EMPLEADO)
       on delete restrict on update restrict;
 
 alter table SEGUIMIENTO
@@ -528,8 +497,8 @@ alter table SEGUIMIENTO
       on delete restrict on update restrict;
 
 alter table ZONA
-   add constraint FK_ZONA_PERTENECE_ZONA foreign key (ZON_ID_ZONA_ENTREGA)
-      references ZONA (ID_ZONA_ENTREGA)
+   add constraint FK_ZONA_PERTENECE_ZONA foreign key (ID_ZONA_SUPERIOR)
+      references ZONA (ID_ZONA)
       on delete restrict on update restrict;
 
 alter table ZONA
