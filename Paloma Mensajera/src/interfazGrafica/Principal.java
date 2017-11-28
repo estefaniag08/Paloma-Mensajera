@@ -49,6 +49,27 @@ public class Principal extends JPanel {
 	private JLabel lblGuia;
 	private JTextField txtNumeroGuia;
 	private JPanel panelDistribucion;
+	private JLabel lblFondo_1;
+	private JLabel fondo3;
+	private JLabel lblFondo_2;
+	private JLabel lblFiltrarGuiasPor;
+	private JButton btnSeleccionar_3;
+	private JLabel lblSeleccionarGua;
+	private JScrollPane scrollPane_2;
+	private JList list;
+	private JButton btnSeleccionar_4;
+	private JButton btnActualizar;
+	private JPanel panelSeg;
+	private JLabel lblId;
+	private JLabel lblAgente;
+	private JLabel lblTipoProceso;
+	private JLabel lblResultado;
+	private JLabel lblEstadoSeguimiento;
+	private JTextField txtIdSeg;
+	private JTextField txtAgente;
+	private JTextField txtResultado;
+	private JTextField txtEstadoSeguimiento;
+	private JTextField txtProceso;
 	 
 	public Principal() {
 		generarPanel();
@@ -95,13 +116,13 @@ public class Principal extends JPanel {
 		
 		subPanel = new JPanel();
 		subPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		subPanel.setBackground(new Color(230, 230, 250));
+		subPanel.setBackground(new Color(240, 248, 255));
 		subPanel.setBounds(27, 48, 644, 121);
 		panelGuia.add(subPanel);
 		subPanel.setLayout(null);
 		
 		lblNumeroGuia = new JLabel("N\u00FAmero gu\u00EDa");
-		lblNumeroGuia.setForeground(new Color(72, 61, 139));
+		lblNumeroGuia.setForeground(new Color(25, 25, 112));
 		lblNumeroGuia.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblNumeroGuia.setBounds(23, 11, 89, 23);
 		subPanel.add(lblNumeroGuia);
@@ -115,7 +136,7 @@ public class Principal extends JPanel {
 		txtNumguia.setColumns(10);
 		
 		lblFecha = new JLabel("Fecha");
-		lblFecha.setForeground(new Color(72, 61, 139));
+		lblFecha.setForeground(new Color(25, 25, 112));
 		lblFecha.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblFecha.setBounds(23, 52, 46, 20);
 		subPanel.add(lblFecha);
@@ -128,7 +149,7 @@ public class Principal extends JPanel {
 		textField.setColumns(10);
 		
 		lblOrdenPendiente = new JLabel("Orden Pendiente");
-		lblOrdenPendiente.setForeground(new Color(72, 61, 139));
+		lblOrdenPendiente.setForeground(new Color(25, 25, 112));
 		lblOrdenPendiente.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblOrdenPendiente.setBounds(228, 13, 110, 20);
 		subPanel.add(lblOrdenPendiente);
@@ -156,7 +177,7 @@ public class Principal extends JPanel {
 		subPanel.add(BoxItemOrden);
 		
 		lblItemOrden = new JLabel("Item Orden");
-		lblItemOrden.setForeground(new Color(72, 61, 139));
+		lblItemOrden.setForeground(new Color(25, 25, 112));
 		lblItemOrden.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblItemOrden.setBounds(228, 49, 81, 20);
 		subPanel.add(lblItemOrden);
@@ -169,7 +190,7 @@ public class Principal extends JPanel {
 		subPanel.add(btnSeleccionar_1);
 		
 		lblEncargado = new JLabel("Encargado");
-		lblEncargado.setForeground(new Color(72, 61, 139));
+		lblEncargado.setForeground(new Color(25, 25, 112));
 		lblEncargado.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblEncargado.setBounds(23, 84, 73, 23);
 		subPanel.add(lblEncargado);
@@ -182,7 +203,7 @@ public class Principal extends JPanel {
 		txtEmpleado.setColumns(10);
 		
 		lblAseguradora = new JLabel("Aseguradora");
-		lblAseguradora.setForeground(new Color(106, 90, 205));
+		lblAseguradora.setForeground(new Color(70, 130, 180));
 		lblAseguradora.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblAseguradora.setBounds(97, 191, 89, 23);
 		panelGuia.add(lblAseguradora);
@@ -193,7 +214,7 @@ public class Principal extends JPanel {
 		panelGuia.add(BoxAseguradora);
 		
 		lblTipoEmbalaje = new JLabel("Tipo embalaje");
-		lblTipoEmbalaje.setForeground(new Color(106, 90, 205));
+		lblTipoEmbalaje.setForeground(new Color(70, 130, 180));
 		lblTipoEmbalaje.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblTipoEmbalaje.setBounds(376, 191, 89, 20);
 		panelGuia.add(lblTipoEmbalaje);
@@ -204,7 +225,7 @@ public class Principal extends JPanel {
 		panelGuia.add(BoxEmbalaje);
 		
 		lblPeso = new JLabel("Peso");
-		lblPeso.setForeground(new Color(106, 90, 205));
+		lblPeso.setForeground(new Color(70, 130, 180));
 		lblPeso.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblPeso.setBounds(97, 223, 46, 20);
 		panelGuia.add(lblPeso);
@@ -216,7 +237,7 @@ public class Principal extends JPanel {
 		textField_1.setColumns(10);
 		
 		lblDelicado = new JLabel("Delicado");
-		lblDelicado.setForeground(new Color(106, 90, 205));
+		lblDelicado.setForeground(new Color(70, 130, 180));
 		lblDelicado.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblDelicado.setBounds(376, 224, 79, 20);
 		panelGuia.add(lblDelicado);
@@ -228,7 +249,7 @@ public class Principal extends JPanel {
 		panelGuia.add(BoxDelicado);
 		
 		lblCliente = new JLabel("Cliente");
-		lblCliente.setForeground(new Color(106, 90, 205));
+		lblCliente.setForeground(new Color(70, 130, 180));
 		lblCliente.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblCliente.setBounds(97, 254, 46, 20);
 		panelGuia.add(lblCliente);
@@ -255,6 +276,11 @@ public class Principal extends JPanel {
 		panelGuia.add(btnGenerarGuiaEn);
 		btnGenerarGuiaEn.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		
+		lblFondo_1 = new JLabel("");
+		lblFondo_1.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
+		lblFondo_1.setBounds(0, 0, 704, 375);
+		panelGuia.add(lblFondo_1);
+		
 		panelZonificacion = new JPanel();
 		panelZonificacion.setBackground(new Color(248, 248, 255));
 		tabbedPane.addTab("Zonificaci\u00F3n", null, panelZonificacion, null);
@@ -263,7 +289,7 @@ public class Principal extends JPanel {
 		
 		panelZonif = new JPanel();
 		panelZonif.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelZonif.setBackground(new Color(230, 230, 250));
+		panelZonif.setBackground(new Color(240, 248, 255));
 		panelZonif.setBounds(69, 78, 560, 245);
 		panelZonificacion.add(panelZonif);
 		panelZonif.setLayout(null);
@@ -277,6 +303,7 @@ public class Principal extends JPanel {
 		scrollPane.setViewportView(listaZonas);
 		
 		lblGuia = new JLabel("Guia");
+		lblGuia.setForeground(new Color(0, 0, 128));
 		lblGuia.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		lblGuia.setBounds(22, 5, 35, 23);
 		panelZonif.add(lblGuia);
@@ -289,7 +316,7 @@ public class Principal extends JPanel {
 		txtNumeroGuia.setColumns(10);
 		
 		lblGuiaPendiente = new JLabel("Guia pendiente de zonificaci\u00F3n");
-		lblGuiaPendiente.setForeground(new Color(106, 90, 205));
+		lblGuiaPendiente.setForeground(new Color(25, 25, 112));
 		lblGuiaPendiente.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblGuiaPendiente.setBounds(69, 36, 176, 20);
 		panelZonificacion.add(lblGuiaPendiente);
@@ -338,10 +365,147 @@ public class Principal extends JPanel {
 		btnGenerarGuiaFinal.setBounds(395, 334, 148, 30);
 		panelZonificacion.add(btnGenerarGuiaFinal);
 		
+		fondo3 = new JLabel("");
+		fondo3.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
+		fondo3.setBounds(0, 0, 704, 375);
+		panelZonificacion.add(fondo3);
+		
 		panelDistribucion = new JPanel();
-		tabbedPane.addTab("Distribuci\u00F3n", null, panelDistribucion, null);
+		tabbedPane.addTab("Listas Distribuci\u00F3n", null, panelDistribucion, null);
 		tabbedPane.setEnabledAt(2, true);
 		panelDistribucion.setLayout(null);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(189, 25, 123, 20);
+		panelDistribucion.add(comboBox);
+		
+		lblFiltrarGuiasPor = new JLabel("Filtrar gu\u00EDas por");
+		lblFiltrarGuiasPor.setForeground(new Color(25, 25, 112));
+		lblFiltrarGuiasPor.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblFiltrarGuiasPor.setBounds(31, 22, 112, 23);
+		panelDistribucion.add(lblFiltrarGuiasPor);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(57, 90, 581, 215);
+		panelDistribucion.add(scrollPane_1);
+		
+		JList listDistrib = new JList();
+		scrollPane_1.setViewportView(listDistrib);
+		
+		btnSeleccionar_3 = new JButton("Seleccionar");
+		btnSeleccionar_3.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnSeleccionar_3.setBounds(378, 24, 123, 23);
+		panelDistribucion.add(btnSeleccionar_3);
+		
+		JButton btnGenerarPdfDistribucion = new JButton("Generar PDF distribuci\u00F3n");
+		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnGenerarPdfDistribucion.setBounds(268, 323, 179, 37);
+		panelDistribucion.add(btnGenerarPdfDistribucion);
+		
+		lblFondo_2 = new JLabel("");
+		lblFondo_2.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
+		lblFondo_2.setBounds(0, 0, 704, 375);
+		panelDistribucion.add(lblFondo_2);
+		
+		JPanel panelSeguimiento = new JPanel();
+		tabbedPane.addTab("Seguimiento", null, panelSeguimiento, null);
+		tabbedPane.setEnabledAt(3, true);
+		panelSeguimiento.setLayout(null);
+		
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(23, 67, 213, 222);
+		panelSeguimiento.add(scrollPane_2);
+		
+		list = new JList();
+		scrollPane_2.setViewportView(list);
+		
+		lblSeleccionarGua = new JLabel("Seleccionar gu\u00EDa");
+		lblSeleccionarGua.setForeground(new Color(25, 25, 112));
+		lblSeleccionarGua.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblSeleccionarGua.setBounds(78, 33, 112, 23);
+		panelSeguimiento.add(lblSeleccionarGua);
+		
+		panelSeg = new JPanel();
+		panelSeg.setBackground(new Color(240, 248, 255));
+		panelSeg.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panelSeg.setBounds(299, 67, 339, 241);
+		panelSeguimiento.add(panelSeg);
+		panelSeg.setLayout(null);
+		
+		lblId = new JLabel("ID");
+		lblId.setForeground(new Color(70, 130, 180));
+		lblId.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblId.setBounds(23, 24, 89, 23);
+		panelSeg.add(lblId);
+		
+		lblAgente = new JLabel("Agente");
+		lblAgente.setForeground(new Color(70, 130, 180));
+		lblAgente.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblAgente.setBounds(23, 62, 89, 23);
+		panelSeg.add(lblAgente);
+		
+		lblTipoProceso = new JLabel("Proceso actual");
+		lblTipoProceso.setForeground(new Color(70, 130, 180));
+		lblTipoProceso.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblTipoProceso.setBounds(23, 102, 102, 23);
+		panelSeg.add(lblTipoProceso);
+		
+		lblResultado = new JLabel("Resultado");
+		lblResultado.setForeground(new Color(70, 130, 180));
+		lblResultado.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblResultado.setBounds(23, 146, 89, 23);
+		panelSeg.add(lblResultado);
+		
+		lblEstadoSeguimiento = new JLabel("Estado seguimiento");
+		lblEstadoSeguimiento.setForeground(new Color(70, 130, 180));
+		lblEstadoSeguimiento.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblEstadoSeguimiento.setBounds(23, 192, 120, 23);
+		panelSeg.add(lblEstadoSeguimiento);
+		
+		txtIdSeg = new JTextField();
+		txtIdSeg.setEditable(false);
+		txtIdSeg.setBounds(169, 24, 86, 20);
+		panelSeg.add(txtIdSeg);
+		txtIdSeg.setColumns(10);
+		
+		txtAgente = new JTextField();
+		txtAgente.setEditable(false);
+		txtAgente.setBounds(169, 62, 137, 20);
+		panelSeg.add(txtAgente);
+		txtAgente.setColumns(10);
+		
+		txtResultado = new JTextField();
+		txtResultado.setEditable(false);
+		txtResultado.setBounds(169, 146, 137, 20);
+		panelSeg.add(txtResultado);
+		txtResultado.setColumns(10);
+		
+		txtEstadoSeguimiento = new JTextField();
+		txtEstadoSeguimiento.setEditable(false);
+		txtEstadoSeguimiento.setBounds(169, 192, 137, 20);
+		panelSeg.add(txtEstadoSeguimiento);
+		txtEstadoSeguimiento.setColumns(10);
+		
+		txtProceso = new JTextField();
+		txtProceso.setEditable(false);
+		txtProceso.setBounds(169, 102, 137, 20);
+		panelSeg.add(txtProceso);
+		txtProceso.setColumns(10);
+		
+		btnActualizar = new JButton("Actualizar");
+		btnActualizar.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnActualizar.setBounds(78, 300, 119, 23);
+		panelSeguimiento.add(btnActualizar);
+		
+		btnSeleccionar_4 = new JButton("Seleccionar");
+		btnSeleccionar_4.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnSeleccionar_4.setBounds(78, 327, 119, 23);
+		panelSeguimiento.add(btnSeleccionar_4);
+		
+		JLabel lblFondo_3 = new JLabel("");
+		lblFondo_3.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
+		lblFondo_3.setBounds(0, 0, 704, 375);
+		panelSeguimiento.add(lblFondo_3);
 		
 		lblFondo = new JLabel("");
 		lblFondo.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo.png")));
