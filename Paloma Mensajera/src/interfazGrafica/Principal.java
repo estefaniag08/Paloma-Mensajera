@@ -70,6 +70,8 @@ public class Principal extends JPanel {
 	private JTextField txtResultado;
 	private JTextField txtEstadoSeguimiento;
 	private JTextField txtProceso;
+	private JButton btnCalcularPrecioSegun;
+	private JTextField txtPrecioPeso;
 	 
 	public Principal() {
 		generarPanel();
@@ -85,6 +87,10 @@ public class Principal extends JPanel {
 	}
 	/**Método que busca el ìtem especifico de la orden*/
 	private void buscarItemOrdenServicio(){
+		
+	}
+	/**Método que genera una guia pendiente de zonificación*/
+	private void generarGuiaPendiente(){
 		
 	}
 	/**Método que busca las guias pendientes por zonificar*/
@@ -277,8 +283,13 @@ public class Principal extends JPanel {
 		txtCliente.setColumns(10);
 		
 		btnGenerarGuaPendiente = new JButton("Generar gu\u00EDa pendiente");
+		btnGenerarGuaPendiente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generarGuiaPendiente();
+			}
+		});
 		btnGenerarGuaPendiente.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnGenerarGuaPendiente.setBounds(271, 300, 194, 33);
+		btnGenerarGuaPendiente.setBounds(271, 318, 194, 33);
 		panelGuia.add(btnGenerarGuaPendiente);
 		
 		btnGenerarGuiaEn = new JButton("Generar guia en blanco");
@@ -291,6 +302,18 @@ public class Principal extends JPanel {
 		btnGenerarGuiaEn.setBounds(483, 11, 186, 27);
 		panelGuia.add(btnGenerarGuiaEn);
 		btnGenerarGuiaEn.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		
+		btnCalcularPrecioSegun = new JButton("Calcular precio segun peso");
+		btnCalcularPrecioSegun.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnCalcularPrecioSegun.setBounds(376, 257, 240, 23);
+		panelGuia.add(btnCalcularPrecioSegun);
+		
+		txtPrecioPeso = new JTextField();
+		txtPrecioPeso.setEditable(false);
+		txtPrecioPeso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
+		txtPrecioPeso.setBounds(451, 291, 86, 20);
+		panelGuia.add(txtPrecioPeso);
+		txtPrecioPeso.setColumns(10);
 		
 		lblFondo_1 = new JLabel("");
 		lblFondo_1.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
