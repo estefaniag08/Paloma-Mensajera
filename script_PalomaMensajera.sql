@@ -65,7 +65,6 @@ CEDULA_CLIENTE
 create table DETALLE_ORDEN_SERVICIO (
    ID_ORDEN_SERVICIO    INT4                 not null,
    ITEM                 INT4                 not null,
-   CONSECUTIVO          INT4                 not null,
    ID_EMBALAJE          INT4                 not null,
    PRECIO_INDIVIDUAL    FLOAT8               not null,
    constraint PK_DETALLE_ORDEN_SERVICIO primary key (ID_ORDEN_SERVICIO, ITEM)
@@ -86,12 +85,6 @@ create  index CONTIENE_FK on DETALLE_ORDEN_SERVICIO (
 ID_ORDEN_SERVICIO
 );
 
-/*==============================================================*/
-/* Index: ESTA_EN_FK                                            */
-/*==============================================================*/
-create  index ESTA_EN_FK on DETALLE_ORDEN_SERVICIO (
-CONSECUTIVO
-);
 
 /*==============================================================*/
 /* Index: DESCRIBE_FK                                           */
@@ -419,11 +412,6 @@ alter table DETALLE_ORDEN_SERVICIO
 alter table DETALLE_ORDEN_SERVICIO
    add constraint FK_DETALLE__DESCRIBE_TIPO_EMB foreign key (ID_EMBALAJE)
       references TIPO_EMBALAJE (ID_EMBALAJE)
-      on delete restrict on update restrict;
-
-alter table DETALLE_ORDEN_SERVICIO
-   add constraint FK_DETALLE__ESTA_EN_GUIA foreign key (CONSECUTIVO)
-      references GUIA (CONSECUTIVO)
       on delete restrict on update restrict;
 
 alter table GENERACION_SEGUIMIENTO
