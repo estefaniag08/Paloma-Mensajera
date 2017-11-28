@@ -64,9 +64,10 @@ CEDULA_CLIENTE
 /*==============================================================*/
 create table DETALLE_ORDEN_SERVICIO (
    ID_ORDEN_SERVICIO    INT4                 not null,
-   ITEM                 INT4                 not null,
+   ITEM                 VARCHAR(30)          not null,
    ID_EMBALAJE          INT4                 not null,
    PRECIO_INDIVIDUAL    FLOAT8               not null,
+   PESO                 FLOAT8               not null,
    constraint PK_DETALLE_ORDEN_SERVICIO primary key (ID_ORDEN_SERVICIO, ITEM)
 );
 
@@ -152,7 +153,7 @@ create table GUIA (
    CONSECUTIVO          INT4                 not null,
    ID_EMBALAJE          INT4                 not null,
    ID_ORDEN_SERVICIO    INT4                 null,
-   ITEM                 INT4                 null,
+   ITEM                 VARCHAR(30)          null,
    ID_ASEGURADORA       INT4                 null,
    ID_ZONA_ENTREGA      INT4                 not null,
    ID_EMPLEADO          INT4                 not null,
