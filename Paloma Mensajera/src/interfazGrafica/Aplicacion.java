@@ -25,7 +25,7 @@ import java.beans.PropertyChangeEvent;
 public class Aplicacion {
 
 	private JFrame frame;
-	private Principal panelPrincipal;
+	private Principal panelPrincipal = new Principal();
 	private JLabel lblIdemp;
 	private JLabel lblContrasena;
 	private JLabel lblInicio;
@@ -33,7 +33,6 @@ public class Aplicacion {
 	private JTextField txtIdempleado;
 	private JPasswordField pwdContrasenaemp;
 	private JButton btnIniciarSesin;
-	private boolean estadoInicio=false;
 	private JPanel panelInicioS;
 	
 	public static void main(String[] args) {
@@ -55,15 +54,13 @@ public class Aplicacion {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 850, 530);
+		frame.setBounds(100, 100, 850, 529);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
 		panelInicioS = new JPanel();
 		setDetails();
-		addToWindow();
-		
-		
+		addToWindow();	
 		
 	}
 	
@@ -124,7 +121,8 @@ public class Aplicacion {
 		try {
 			if(FacadeEmpleado.login(id, contrasena)) {
 				JOptionPane.showMessageDialog(null, "Login exitoso");
-				setEstadoInicio(true);
+				abrirPrincipal();
+				
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Datos incorrectos, revíselos por favor");
@@ -134,13 +132,12 @@ public class Aplicacion {
 			System.out.println("Error: " + e1.getMessage());
 		}
 	}
-	public boolean isEstadoInicio() {
-		return estadoInicio;
-	}
-	public void setEstadoInicio(boolean estadoInicio) {
-		this.estadoInicio = estadoInicio;
-	}
 	
+	private void abrirPrincipal(){
+		frame.getContentPane().remove(panelInicioS);
+		frame.getContentPane().add(panelPrincipal);
+		panelPrincipal.setBounds(0, 0, 850, 530);
+	}
 	
 	
 }
