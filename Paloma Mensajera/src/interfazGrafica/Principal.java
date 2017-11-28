@@ -48,6 +48,7 @@ public class Principal extends JPanel {
 	private JList listaZonas;
 	private JLabel lblGuia;
 	private JTextField txtNumeroGuia;
+	private JPanel panelDistribucion;
 	 
 	public Principal() {
 		generarPanel();
@@ -75,7 +76,8 @@ public class Principal extends JPanel {
 	}
 	/**Método que genera la guia final con su precio y todo*/
 	private void generarGuiaFinal(){
-		
+		GuiaFinal guiaF = new GuiaFinal();
+		guiaF.main(null);
 	}
 	private void generarPanel(){
 		setLayout(null);
@@ -271,20 +273,25 @@ public class Principal extends JPanel {
 		panelZonif.add(scrollPane);
 		
 		listaZonas = new JList();
+		listaZonas.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		scrollPane.setViewportView(listaZonas);
 		
 		lblGuia = new JLabel("Guia");
-		lblGuia.setBounds(21, 11, 35, 14);
+		lblGuia.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		lblGuia.setBounds(22, 5, 35, 23);
 		panelZonif.add(lblGuia);
 		
 		txtNumeroGuia = new JTextField();
+		txtNumeroGuia.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtNumeroGuia.setEditable(false);
 		txtNumeroGuia.setBounds(77, 8, 86, 20);
 		panelZonif.add(txtNumeroGuia);
 		txtNumeroGuia.setColumns(10);
 		
 		lblGuiaPendiente = new JLabel("Guia pendiente de zonificaci\u00F3n");
-		lblGuiaPendiente.setBounds(100, 36, 145, 20);
+		lblGuiaPendiente.setForeground(new Color(106, 90, 205));
+		lblGuiaPendiente.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblGuiaPendiente.setBounds(69, 36, 176, 20);
 		panelZonificacion.add(lblGuiaPendiente);
 		
 		BoxGuiaPendZon = new JComboBox();
@@ -292,40 +299,49 @@ public class Principal extends JPanel {
 		panelZonificacion.add(BoxGuiaPendZon);
 		
 		btnSeleccionar_2 = new JButton("Seleccionar");
+		btnSeleccionar_2.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnSeleccionar_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seleccionGuiaZonificacion();
 			}
 		});
-		btnSeleccionar_2.setBounds(495, 35, 89, 23);
+		btnSeleccionar_2.setBounds(495, 35, 117, 23);
 		panelZonificacion.add(btnSeleccionar_2);
 		
 		btnZonificar = new JButton("Zonificar");
+		btnZonificar.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnZonificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				zonificar();
 			}
 		});
-		btnZonificar.setBounds(177, 334, 89, 30);
+		btnZonificar.setBounds(155, 334, 89, 30);
 		panelZonificacion.add(btnZonificar);
 		
 		btnCrearZona = new JButton("Crear Zona");
+		btnCrearZona.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnCrearZona.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		btnCrearZona.setBounds(298, 334, 89, 30);
+		btnCrearZona.setBounds(265, 334, 109, 30);
 		panelZonificacion.add(btnCrearZona);
 		
 		btnGenerarGuiaFinal = new JButton("Generar gu\u00EDa final");
+		btnGenerarGuiaFinal.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnGenerarGuiaFinal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				generarGuiaFinal();
 			}
 		});
-		btnGenerarGuiaFinal.setBounds(417, 334, 117, 30);
+		btnGenerarGuiaFinal.setBounds(395, 334, 148, 30);
 		panelZonificacion.add(btnGenerarGuiaFinal);
+		
+		panelDistribucion = new JPanel();
+		tabbedPane.addTab("Distribuci\u00F3n", null, panelDistribucion, null);
+		tabbedPane.setEnabledAt(2, true);
+		panelDistribucion.setLayout(null);
 		
 		lblFondo = new JLabel("");
 		lblFondo.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo.png")));
