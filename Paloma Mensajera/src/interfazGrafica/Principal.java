@@ -100,6 +100,22 @@ public class Principal extends JPanel {
 		GuiaFinal guiaF = new GuiaFinal();
 		guiaF.main(null);
 	}
+	/**Método que filtra las guias segun la ciudad*/
+	private void filtrarGuiasDistribucion(){
+		
+	}
+	/**Método que genera la lista de distribucion*/
+	private void generarPdfDistribucion(){
+		
+	}
+	/**Método que genera la lista de guias*/
+	private void actualizarListaGuiasSeg(){
+		
+	}
+	/**Método que seleccionar guia para ver su seguimiento*/
+	private void seleccionarGuia(){
+		
+	}
 	private void generarPanel(){
 		setLayout(null);
 		
@@ -393,11 +409,21 @@ public class Principal extends JPanel {
 		scrollPane_1.setViewportView(listDistrib);
 		
 		btnSeleccionar_3 = new JButton("Seleccionar");
+		btnSeleccionar_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				filtrarGuiasDistribucion();
+			}
+		});
 		btnSeleccionar_3.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnSeleccionar_3.setBounds(378, 24, 123, 23);
 		panelDistribucion.add(btnSeleccionar_3);
 		
 		JButton btnGenerarPdfDistribucion = new JButton("Generar PDF distribuci\u00F3n");
+		btnGenerarPdfDistribucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generarPdfDistribucion();
+			}
+		});
 		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnGenerarPdfDistribucion.setBounds(268, 323, 179, 37);
 		panelDistribucion.add(btnGenerarPdfDistribucion);
@@ -493,11 +519,21 @@ public class Principal extends JPanel {
 		txtProceso.setColumns(10);
 		
 		btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actualizarListaGuiasSeg();
+			}
+		});
 		btnActualizar.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnActualizar.setBounds(78, 300, 119, 23);
 		panelSeguimiento.add(btnActualizar);
 		
 		btnSeleccionar_4 = new JButton("Seleccionar");
+		btnSeleccionar_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				seleccionarGuia();
+			}
+		});
 		btnSeleccionar_4.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnSeleccionar_4.setBounds(78, 327, 119, 23);
 		panelSeguimiento.add(btnSeleccionar_4);
