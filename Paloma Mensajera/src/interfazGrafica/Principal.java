@@ -5,7 +5,9 @@ import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
 
 import persistencia.FacadeAseguradora;
+import persistencia.FacadeEmbalaje;
 import persistencia.FacadeEmpleado;
+import persistencia.FacadeOrdenes;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +18,7 @@ import java.util.Random;
 public class Principal extends JPanel {
 
 	private JTextField txtNumguia;
-	private JTextField textField_1;
+	private JTextField peso;
 	private JTextField txtCliente;
 	private JTabbedPane tabbedPane;
 	private JPanel panelGuia;
@@ -41,7 +43,6 @@ public class Principal extends JPanel {
 	private JComboBox BoxAseguradora;
 	private JComboBox BoxEmbalaje;
 	private JComboBox BoxDelicado;
-	private JComboBox BoxGuiaPendZon;
 	private JButton btnSeleccionar_2;
 	private JButton btnZonificar;
 	private JButton btnCrearZona;
@@ -57,7 +58,6 @@ public class Principal extends JPanel {
 	private JButton btnSeleccionar_3;
 	private JLabel lblSeleccionarGua;
 	private JScrollPane scrollPane_2;
-	private JList list;
 	private JButton btnSeleccionar_4;
 	private JButton btnActualizar;
 	private JPanel panelSeg;
@@ -77,14 +77,9 @@ public class Principal extends JPanel {
 	private JTextField txtItemOrden;
 
 	private int numeroGuia;
+	private JTable table;
 
-	public JTextField getTxtOrden() {
-		return txtOrden;
-	}
-
-	public JTextField getTxtItemOrden() {
-		return txtItemOrden;
-	}
+	
 
 	public Principal() {
 		this.numeroGuia = (int) (Math.random() * (999 - 100) + 100);
@@ -94,7 +89,13 @@ public class Principal extends JPanel {
 
 	/** Metodo para generar limpiar elementos de la guia */
 	private void generarEnBlanco() {
-
+		/**this.numeroGuia = (int) (Math.random() * (999 - 100) + 100);
+		 JTextField txtNumguia;
+		 JTextField peso;
+		 JTextField txtCliente;
+		JTextField txtPrecioPeso;
+		JTextField txtOrden;
+		JTextField txtItemOrden;*/
 	}
 
 	/** Metodo que busca ordenes pendientes */
@@ -160,6 +161,18 @@ public class Principal extends JPanel {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private void cargarBoxEmbalaje(){
+		try{
+			ResultSet rs2 = FacadeEmbalaje.obtenerRegistros();
+			while(rs2.next()) {
+				BoxEmbalaje.addItem(rs2.getString(1));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void generarPanel() {
@@ -239,13 +252,13 @@ public class Principal extends JPanel {
 		lblAseguradora = new JLabel("Aseguradora");
 		lblAseguradora.setForeground(new Color(70, 130, 180));
 		lblAseguradora.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblAseguradora.setBounds(97, 191, 89, 23);
+		lblAseguradora.setBounds(72, 191, 89, 23);
 		panelGuia.add(lblAseguradora);
 
 
 		BoxAseguradora = new JComboBox();
 		BoxAseguradora.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		BoxAseguradora.setBounds(186, 191, 151, 20);
+		BoxAseguradora.setBounds(160, 191, 177, 20);
 		panelGuia.add(BoxAseguradora);
 		cargarBoxAseguradora();
 
@@ -259,18 +272,20 @@ public class Principal extends JPanel {
 		BoxEmbalaje.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		BoxEmbalaje.setBounds(465, 193, 151, 20);
 		panelGuia.add(BoxEmbalaje);
+		cargarBoxEmbalaje();
 
 		lblPeso = new JLabel("Peso");
 		lblPeso.setForeground(new Color(70, 130, 180));
 		lblPeso.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblPeso.setBounds(97, 223, 46, 20);
+		lblPeso.setBounds(72, 223, 46, 20);
 		panelGuia.add(lblPeso);
 
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		textField_1.setBounds(186, 223, 86, 20);
-		panelGuia.add(textField_1);
-		textField_1.setColumns(10);
+		peso = new JTextField();
+		peso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
+		peso.setBounds(160, 225, 86, 20);
+		panelGuia.add(peso);
+		peso.setColumns(10);
+		
 
 		lblDelicado = new JLabel("Delicado");
 		lblDelicado.setForeground(new Color(70, 130, 180));
@@ -287,12 +302,12 @@ public class Principal extends JPanel {
 		lblCliente = new JLabel("Cliente");
 		lblCliente.setForeground(new Color(70, 130, 180));
 		lblCliente.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblCliente.setBounds(97, 254, 46, 20);
+		lblCliente.setBounds(72, 254, 46, 20);
 		panelGuia.add(lblCliente);
 
 		txtCliente = new JTextField();
 		txtCliente.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		txtCliente.setBounds(186, 254, 86, 20);
+		txtCliente.setBounds(160, 254, 177, 20);
 		panelGuia.add(txtCliente);
 		txtCliente.setColumns(10);
 
@@ -318,6 +333,14 @@ public class Principal extends JPanel {
 		btnGenerarGuiaEn.setFont(new Font("Agency FB", Font.PLAIN, 20));
 
 		btnCalcularPrecioSegun = new JButton("Calcular precio segun peso");
+		btnCalcularPrecioSegun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String precioP = (String) "1";
+						double peso = Double.parseDouble(getPeso().getText());
+						double pesoFinal =  peso*500;
+						txtPrecioPeso.setText(String.valueOf(pesoFinal));
+			}
+		});
 		btnCalcularPrecioSegun.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnCalcularPrecioSegun.setBounds(376, 257, 240, 23);
 		panelGuia.add(btnCalcularPrecioSegun);
@@ -328,6 +351,7 @@ public class Principal extends JPanel {
 		txtPrecioPeso.setBounds(451, 291, 86, 20);
 		panelGuia.add(txtPrecioPeso);
 		txtPrecioPeso.setColumns(10);
+	
 
 		lblFondo_1 = new JLabel("");
 		lblFondo_1.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
@@ -371,12 +395,8 @@ public class Principal extends JPanel {
 		lblGuiaPendiente = new JLabel("Guia pendiente de zonificaci\u00F3n");
 		lblGuiaPendiente.setForeground(new Color(25, 25, 112));
 		lblGuiaPendiente.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblGuiaPendiente.setBounds(69, 36, 176, 20);
+		lblGuiaPendiente.setBounds(166, 36, 176, 20);
 		panelZonificacion.add(lblGuiaPendiente);
-
-		BoxGuiaPendZon = new JComboBox();
-		BoxGuiaPendZon.setBounds(255, 36, 197, 20);
-		panelZonificacion.add(BoxGuiaPendZon);
 
 		btnSeleccionar_2 = new JButton("Seleccionar");
 		btnSeleccionar_2.setFont(new Font("Agency FB", Font.PLAIN, 20));
@@ -385,7 +405,7 @@ public class Principal extends JPanel {
 				seleccionGuiaZonificacion();
 			}
 		});
-		btnSeleccionar_2.setBounds(495, 35, 117, 23);
+		btnSeleccionar_2.setBounds(380, 35, 117, 23);
 		panelZonificacion.add(btnSeleccionar_2);
 
 		btnZonificar = new JButton("Zonificar");
@@ -478,9 +498,9 @@ public class Principal extends JPanel {
 		scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(23, 67, 213, 222);
 		panelSeguimiento.add(scrollPane_2);
-
-		list = new JList();
-		scrollPane_2.setViewportView(list);
+		
+		table = new JTable();
+		scrollPane_2.setViewportView(table);
 
 		lblSeleccionarGua = new JLabel("Seleccionar gu\u00EDa");
 		lblSeleccionarGua.setForeground(new Color(25, 25, 112));
@@ -585,4 +605,108 @@ public class Principal extends JPanel {
 		lblFondo.setBounds(0, 0, 850, 530);
 		add(lblFondo);
 	}
+	public JTextField getTxtOrden() {
+		return txtOrden;
+	}
+
+	public JTextField getTxtItemOrden() {
+		return txtItemOrden;
+	}
+
+	public JTextField getTxtNumguia() {
+		return txtNumguia;
+	}
+
+	public void setTxtNumguia(JTextField txtNumguia) {
+		this.txtNumguia = txtNumguia;
+	}
+
+	public JTextField getPeso() {
+		return peso;
+	}
+
+	public void setPeso(JTextField peso) {
+		this.peso = peso;
+	}
+
+	public JTextField getTxtCliente() {
+		return txtCliente;
+	}
+
+	public void setTxtCliente(JTextField txtCliente) {
+		this.txtCliente = txtCliente;
+	}
+
+	public JTextField getTxtNumeroGuia() {
+		return txtNumeroGuia;
+	}
+
+	public void setTxtNumeroGuia(JTextField txtNumeroGuia) {
+		this.txtNumeroGuia = txtNumeroGuia;
+	}
+
+	public JTextField getTxtIdSeg() {
+		return txtIdSeg;
+	}
+
+	public void setTxtIdSeg(JTextField txtIdSeg) {
+		this.txtIdSeg = txtIdSeg;
+	}
+
+	public JTextField getTxtAgente() {
+		return txtAgente;
+	}
+
+	public void setTxtAgente(JTextField txtAgente) {
+		this.txtAgente = txtAgente;
+	}
+
+	public JTextField getTxtResultado() {
+		return txtResultado;
+	}
+
+	public void setTxtResultado(JTextField txtResultado) {
+		this.txtResultado = txtResultado;
+	}
+
+	public JTextField getTxtEstadoSeguimiento() {
+		return txtEstadoSeguimiento;
+	}
+
+	public void setTxtEstadoSeguimiento(JTextField txtEstadoSeguimiento) {
+		this.txtEstadoSeguimiento = txtEstadoSeguimiento;
+	}
+
+	public JTextField getTxtProceso() {
+		return txtProceso;
+	}
+
+	public void setTxtProceso(JTextField txtProceso) {
+		this.txtProceso = txtProceso;
+	}
+
+	public JTextField getTxtPrecioPeso() {
+		return txtPrecioPeso;
+	}
+
+	public void setTxtPrecioPeso(JTextField txtPrecioPeso) {
+		this.txtPrecioPeso = txtPrecioPeso;
+	}
+
+	public void setTxtOrden(JTextField txtOrden) {
+		this.txtOrden = txtOrden;
+	}
+
+	public void setTxtItemOrden(JTextField txtItemOrden) {
+		this.txtItemOrden = txtItemOrden;
+	}
+
+	public JButton getBtnCalcularPrecioSegun() {
+		return btnCalcularPrecioSegun;
+	}
+
+	public void setBtnCalcularPrecioSegun(JButton btnCalcularPrecioSegun) {
+		this.btnCalcularPrecioSegun = btnCalcularPrecioSegun;
+	}
+	
 }

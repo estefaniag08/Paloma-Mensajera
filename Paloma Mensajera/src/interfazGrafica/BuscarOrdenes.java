@@ -22,6 +22,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import java.awt.Color;
 
 public class BuscarOrdenes extends JFrame {
 
@@ -32,19 +35,17 @@ public class BuscarOrdenes extends JFrame {
 	private DefaultTableModel modelDetalles;
 	private JScrollPane scroll1;
 	private JTable tableDetalles;
-	
+	private ResultSet rs=null;
 	private Principal ventana;
 	private String idOrden;
 	private String item;
-
+	private String cliente;
+	
 	public static void main(String[] args) {
 		BuscarOrdenes b = new BuscarOrdenes(null);
 		b.setVisible(true);
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public BuscarOrdenes(Principal ventana) {
 		this.ventana = ventana;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +56,9 @@ public class BuscarOrdenes extends JFrame {
 		contentPane.setLayout(null);
 
 		JLabel lblrdenesDeServicio = new JLabel("\u00D3rdenes de Servicio");
-		lblrdenesDeServicio.setBounds(233, 11, 101, 14);
+		lblrdenesDeServicio.setForeground(new Color(25, 25, 112));
+		lblrdenesDeServicio.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblrdenesDeServicio.setBounds(215, 11, 130, 20);
 		contentPane.add(lblrdenesDeServicio);
 		setLocationRelativeTo(null);
 
@@ -71,13 +74,14 @@ public class BuscarOrdenes extends JFrame {
 		modelDetalles = new nonEditableTable(data, header);
 
 		JLabel lblDetallesDeLa = new JLabel("Detalles de la orden de servicio seleccionada");
+		lblDetallesDeLa.setForeground(new Color(25, 25, 112));
+		lblDetallesDeLa.setFont(new Font("Agency FB", Font.BOLD, 20));
 		lblDetallesDeLa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDetallesDeLa.setBounds(141, 202, 285, 14);
+		lblDetallesDeLa.setBounds(141, 202, 296, 27);
 		contentPane.add(lblDetallesDeLa);
 
 		tableOrdenes = new JTable();
 		tableOrdenes.addMouseListener(new MouseAdapter() {
-			@Override
 			public void mousePressed(MouseEvent me) {
 				vaciarTabla(modelDetalles);
 				JTable table = (JTable) me.getSource();
@@ -85,6 +89,8 @@ public class BuscarOrdenes extends JFrame {
 				int row = table.rowAtPoint(point);
 				String idOrden = (String) table.getValueAt(row, 0);
 				cargarDetalles(idOrden);
+				cliente= (String) table.getValueAt(row, 2);
+				
 			}
 		});
 		tableOrdenes.setBounds(39, 137, 497, 100);
@@ -98,14 +104,15 @@ public class BuscarOrdenes extends JFrame {
 
 		tableDetalles = new JTable();
 		tableDetalles.addMouseListener(new MouseAdapter() {
-			@Override
 			public void mousePressed(MouseEvent e) {
 				JTable table = (JTable)e.getSource();
 				Point point = e.getPoint();
 				int row = table.rowAtPoint(point);
 				if(e.getClickCount()==2) {
 					String item = (String)table.getValueAt(row,0);
-					cargarValor(item);
+					String peso = (String)table.getValueAt(row,3);
+					String precio = (String)table.getValueAt(row,2);
+					cargarValor(item, peso, precio);
 				}
 			}
 		});
@@ -115,15 +122,24 @@ public class BuscarOrdenes extends JFrame {
 		scroll2.setBounds(10, 240, 547, 100);
 		contentPane.add(scroll2);
 		scroll2.setViewportView(tableDetalles);
+		
+		JLabel lblFondo = new JLabel("");
+		lblFondo.setIcon(new ImageIcon(BuscarOrdenes.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
+		lblFondo.setBounds(0, 0, 567, 378);
+		contentPane.add(lblFondo);
 
 		// Se cargan las órdenes de servicio
 		cargarOrdenes();
 	}
 	
-	public void cargarValor(String item) {
+	public void cargarValor(String item, String peso, String precio){
 		this.item = item;
 		this.ventana.getTxtItemOrden().setText(this.item);
 		this.ventana.getTxtOrden().setText(this.idOrden);
+		this.ventana.getPeso().setText(peso);
+		this.ventana.getTxtPrecioPeso().setText(precio);
+		this.ventana.getBtnCalcularPrecioSegun().setEnabled(false);
+		this.ventana.getTxtCliente().setText(cliente);
 		dispose();
 	}
 
