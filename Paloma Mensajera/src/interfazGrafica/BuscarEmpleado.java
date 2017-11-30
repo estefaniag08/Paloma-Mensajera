@@ -25,6 +25,7 @@ public class BuscarEmpleado extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tabla;
+	private int a;
 	private JScrollPane scrollPane;
 	private Principal ventana;
 	private DefaultTableModel modelGuia;
