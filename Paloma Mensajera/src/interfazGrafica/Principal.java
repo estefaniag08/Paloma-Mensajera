@@ -102,7 +102,6 @@ public class Principal extends JPanel {
 	private JTextField txtRuta;
 	private JButton btnGenerarPdfDistribucion;
 	private JComboBox BoxZonas;
-	private final JButton btnBuscarGuiasZona = new JButton("Buscar ruta");
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -117,14 +116,6 @@ public class Principal extends JPanel {
 		String[][] datos = {};
 		modelDist = new nonEditableModel(cabezera, datos);
 		tablaDist.setModel(modelDist);
-		btnBuscarGuiasZona.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				cargarGuiasZonas();
-			}
-		});
-		btnBuscarGuiasZona.setBounds(450, 20, 116, 31);
-		panelDistribucion.add(btnBuscarGuiasZona);
-		btnBuscarGuiasZona.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		
 	}
 
@@ -249,7 +240,7 @@ public class Principal extends JPanel {
 				pdfTable.addCell(tablaDist.getColumnName(i));
 			}
 
-			for (int rows = 0; rows < tablaDist.getRowCount() - 1; rows++) {
+			for (int rows = 0; rows < tablaDist.getRowCount() ; rows++) {
 				for (int cols = 0; cols < tablaDist.getColumnCount(); cols++) {
 					pdfTable.addCell(tablaDist.getModel().getValueAt(rows, cols).toString());
 
@@ -455,7 +446,6 @@ public class Principal extends JPanel {
 		panelGuia.add(lblAseguradora);
 
 		BoxAseguradora = new JComboBox();
-		BoxAseguradora.setEnabled(false);
 		BoxAseguradora.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		BoxAseguradora.setBounds(160, 191, 177, 20);
 		panelGuia.add(BoxAseguradora);
@@ -467,7 +457,6 @@ public class Principal extends JPanel {
 		panelGuia.add(lblTipoEmbalaje);
 
 		BoxEmbalaje = new JComboBox();
-		BoxEmbalaje.setEnabled(false);
 		BoxEmbalaje.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		BoxEmbalaje.setBounds(465, 193, 151, 20);
 		panelGuia.add(BoxEmbalaje);
@@ -479,7 +468,6 @@ public class Principal extends JPanel {
 		panelGuia.add(lblPeso);
 
 		peso = new JTextField();
-		peso.setEnabled(false);
 		peso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		peso.setBounds(160, 225, 133, 20);
 		panelGuia.add(peso);
@@ -492,7 +480,6 @@ public class Principal extends JPanel {
 		panelGuia.add(lblDelicado);
 
 		BoxDelicado = new JComboBox();
-		BoxDelicado.setEnabled(false);
 		BoxDelicado.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		BoxDelicado.setModel(new DefaultComboBoxModel(new String[] { "", "Si", "No" }));
 		BoxDelicado.setBounds(465, 225, 151, 20);
@@ -505,14 +492,12 @@ public class Principal extends JPanel {
 		panelGuia.add(lblCliente);
 
 		txtCliente = new JTextField();
-		txtCliente.setEnabled(false);
 		txtCliente.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtCliente.setBounds(160, 254, 177, 20);
 		panelGuia.add(txtCliente);
 		txtCliente.setColumns(10);
 
 		btnGenerarGuaPendiente = new JButton("Generar gu\u00EDa pendiente");
-		btnGenerarGuaPendiente.setEnabled(false);
 		btnGenerarGuaPendiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				generarGuiaPendiente();
@@ -534,7 +519,6 @@ public class Principal extends JPanel {
 		btnGenerarGuiaEn.setFont(new Font("Agency FB", Font.PLAIN, 20));
 
 		btnCalcularPrecioSegun = new JButton("Calcular precio segun peso");
-		btnCalcularPrecioSegun.setEnabled(false);
 		btnCalcularPrecioSegun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				float peso = Float.parseFloat(getPeso().getText());
@@ -681,6 +665,16 @@ public class Principal extends JPanel {
 		txtRuta.setBounds(57, 328, 176, 20);
 		panelDistribucion.add(txtRuta);
 		txtRuta.setColumns(10);
+		
+		JButton btnBuscarGuaRuta = new JButton("Buscar guia ruta");
+		btnBuscarGuaRuta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cargarGuiasZonas();
+			}
+		});
+		btnBuscarGuaRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnBuscarGuaRuta.setBounds(435, 24, 164, 23);
+		panelDistribucion.add(btnBuscarGuaRuta);
 
 		lblFondo_2 = new JLabel("");
 		lblFondo_2.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
