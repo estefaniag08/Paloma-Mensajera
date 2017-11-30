@@ -48,6 +48,7 @@ public class GuiaFinal extends JFrame {
 	private static GuiaFinal frame;
 	private JTextField txtRuta;
 
+
 	private ResultSet datos;
 
 	private void generarPdf() {
@@ -56,15 +57,15 @@ public class GuiaFinal extends JFrame {
 
 		try {
 			FileOutputStream archivo = new FileOutputStream(ruta + ".PDF");
+
 			Document doc = new Document();
 			PdfWriter.getInstance(doc, archivo);
 
 			doc.open();
 			doc.add(new Paragraph("Numero Guia: " + txtNumGuia.getText()));
 			List list = new List();
-			List lista = new List();
-			lista.setSymbolIndent(12);
-			lista.setListSymbol("\u2022");
+			list.setSymbolIndent(12);
+			list.setListSymbol("\u2022");
 			list.add(new ListItem("Fecha: " + txtFecha.getText()));
 			list.add(new ListItem("Peso: " + txtPeso.getText()));
 			list.add(new ListItem("Cliente: " + txtCliente.getText()));

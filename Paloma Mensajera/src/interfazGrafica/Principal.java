@@ -5,6 +5,13 @@ import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import logica.EmpleadoLoggeado;
 import logica.Guia;
 import logica.OrdenServicio;
@@ -17,9 +24,12 @@ import persistencia.FacadeZona;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
+import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JPanel {
 
@@ -83,13 +93,15 @@ public class Principal extends JPanel {
 	private JTextField txtItemOrden;
 
 	private JTable table;
+
 	private JTable tableZonas;
 	private DefaultTableModel modelZonas;
+
 
 	public Principal(Frame container) {
 		generarPanel();
 		this.frameContainer = container;
-		String[] header = { "ID", "TIPO", "NOMBRE", "RURAL/URBANO", "LATITUD", "LONGITUD", "REGIÓN" };
+		String[] header = { "ID", "TIPO", "NOMBRE", "RURAL/URBANO", "LATITUD", "LONGITUD", "REGIÃ“N" };
 		String[][] data = {};
 		modelZonas = new nonEditableModel(header, data);
 		tableZonas.setModel(modelZonas);
@@ -97,11 +109,12 @@ public class Principal extends JPanel {
 
 	/** Metodo para generar limpiar elementos de la guia */
 	private void generarEnBlanco() {
-		/**
-		 * this.numeroGuia = (int) (Math.random() * (999 - 100) + 100); JTextField
-		 * txtNumguia; JTextField peso; JTextField txtCliente; JTextField txtPrecioPeso;
-		 * JTextField txtOrden; JTextField txtItemOrden;
-		 */
+		txtNumguia.setText("");
+		peso.setText("");
+		txtCliente.setText("");
+		txtPrecioPeso.setText("");
+		txtOrden.setText(""); 
+		txtItemOrden.setText("");
 	}
 
 	/** Metodo que busca ordenes pendientes */
@@ -110,12 +123,12 @@ public class Principal extends JPanel {
 		ventana.setVisible(true);
 	}
 
-	/** Método que busca el ìtem especifico de la orden */
+	/** MÃ©todo que busca el Ã¬tem especifico de la orden */
 	private void buscarItemOrdenServicio() {
 
 	}
 
-	/** Método que genera una guia pendiente de zonificación */
+	/** MÃ©todo que genera una guia pendiente de zonificaciÃ³n */
 	private void generarGuiaPendiente() {
 		String aseguradora = BoxAseguradora.getSelectedItem().toString();
 		String embalaje = BoxEmbalaje.getSelectedItem().toString();
@@ -130,7 +143,7 @@ public class Principal extends JPanel {
 				delicado = "false";
 				break;
 			}
-			// Acción de ingreso en base de datos
+			// AcciÃ³n de ingreso en base de datos
 			Guia guia = new Guia();
 			guia.setId(txtNumguia.getText());
 			guia.setIdEmbalaje(embalaje.split(" - ")[0]);
@@ -145,7 +158,7 @@ public class Principal extends JPanel {
 
 			try {
 				FacadeGuia.insertarGuia(guia);
-				JOptionPane.showMessageDialog(null, "Guía creada con éxito");
+				JOptionPane.showMessageDialog(null, "GuÃ­a creada con Ã©xito");
 				this.frameContainer.remove(this);
 				Principal nuevaVentana = new Principal(frameContainer);
 				frameContainer.add(nuevaVentana);
@@ -155,11 +168,11 @@ public class Principal extends JPanel {
 				System.out.println("Error: " + e.getMessage());
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Digite la totalidad de los datos de la guía");
+			JOptionPane.showMessageDialog(null, "Digite la totalidad de los datos de la guÃ­a");
 		}
 	}
 
-	// Verifica si el campo está en blanco
+	// Verifica si el campo estÃ¡ en blanco
 	private boolean enBlanco(String valor) {
 		if (valor.isEmpty()) {
 			return false;
@@ -167,13 +180,13 @@ public class Principal extends JPanel {
 		return true;
 	}
 
-	/** Método que busca las guias pendientes por zonificar */
+	/** MÃ©todo que busca las guias pendientes por zonificar */
 	private void seleccionGuiaZonificacion() {
 		BuscarGuiasZonificar ventana = new BuscarGuiasZonificar(this);
 		ventana.setVisible(true);
 	}
 
-	/** Método que genera la guia final con su precio y todo */
+	/** MÃ©todo que genera la guia final con su precio y todo */
 	private void generarGuiaFinal() {
 		int row = tableZonas.getSelectedRow();
 		if (row == -1) {
@@ -183,7 +196,7 @@ public class Principal extends JPanel {
 			String idGuia = txtNumeroGuia.getText();
 			try {
 				FacadeGuia.zonificarGuia(idGuia, idZona);
-				JOptionPane.showMessageDialog(null,"La guía ha sido zonificada");
+				JOptionPane.showMessageDialog(null,"La guÃ­a ha sido zonificada");
 				this.frameContainer.remove(this);
 				Principal nuevaVentana = new Principal(frameContainer);
 				frameContainer.add(nuevaVentana);
@@ -198,22 +211,51 @@ public class Principal extends JPanel {
 
 	}
 
-	/** Método que filtra las guias segun la ciudad */
+	/** MÃ©todo que filtra las guias segun la ciudad */
 	private void filtrarGuiasDistribucion() {
 
 	}
 
-	/** Método que genera la lista de distribucion */
+	/** MÃ©todo que genera la lista de distribucion */
 	private void generarPdfDistribucion() {
+		String ruta=txtRuta.getText();
+		
+		
+		try{
+			FileOutputStream archivo = new FileOutputStream(ruta+".PDF");
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			
+			doc.open();
+			 PdfPTable pdfTable = new PdfPTable(tablaDist.getColumnCount());
+	            
+	            for (int i = 0; i < tablaDist.getColumnCount(); i++) {
+	                pdfTable.addCell(tablaDist.getColumnName(i));
+	            }
+	           
+	            for (int rows = 0; rows < tablaDist.getRowCount() - 1; rows++) {
+	                for (int cols = 0; cols < tablaDist.getColumnCount(); cols++) {
+	                    pdfTable.addCell(tablaDist.getModel().getValueAt(rows, cols).toString());
+
+	                }
+	            }
+	            doc.add(pdfTable);
+			doc.close();
+			JOptionPane.showMessageDialog(null, "PDF creado");
+			
+		} catch (Exception e) {
+			
+		}
+		
 
 	}
 
-	/** Método que genera la lista de guias */
+	/** MÃ©todo que genera la lista de guias */
 	private void actualizarListaGuiasSeg() {
 
 	}
 
-	/** Método que seleccionar guia para ver su seguimiento */
+	/** MÃ©todo que seleccionar guia para ver su seguimiento */
 	private void seleccionarGuia() {
 
 	}
@@ -243,6 +285,15 @@ public class Principal extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void buscarRuta(){
+		JFileChooser dlg = new JFileChooser();
+		int option = dlg.showSaveDialog(dlg);
+		if(option == JFileChooser.APPROVE_OPTION){
+			File f= dlg.getSelectedFile();
+			txtRuta.setText(f.toString());
+		}	
 	}
 
 	public void cargarZonas() {
@@ -549,9 +600,18 @@ public class Principal extends JPanel {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(57, 90, 581, 215);
 		panelDistribucion.add(scrollPane_1);
-
-		JList listDistrib = new JList();
-		scrollPane_1.setViewportView(listDistrib);
+		
+		tablaDist = new JTable();
+		tablaDist.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"dd", "dd", "eeee"},
+				{"dsdsdwew", "wew", null},
+			},
+			new String[] {
+				"New ewe", "New column", "New column"
+			}
+		));
+		scrollPane_1.setViewportView(tablaDist);
 
 		btnSeleccionar_3 = new JButton("Seleccionar");
 		btnSeleccionar_3.addActionListener(new ActionListener() {
@@ -570,8 +630,23 @@ public class Principal extends JPanel {
 			}
 		});
 		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnGenerarPdfDistribucion.setBounds(268, 323, 179, 37);
+		btnGenerarPdfDistribucion.setBounds(427, 316, 211, 37);
 		panelDistribucion.add(btnGenerarPdfDistribucion);
+		
+		JButton btnBuscarRuta = new JButton("Buscar ruta");
+		btnBuscarRuta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				buscarRuta();
+			}
+		});
+		btnBuscarRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnBuscarRuta.setBounds(255, 327, 123, 23);
+		panelDistribucion.add(btnBuscarRuta);
+		
+		txtRuta = new JTextField();
+		txtRuta.setBounds(57, 328, 176, 20);
+		panelDistribucion.add(txtRuta);
+		txtRuta.setColumns(10);
 
 		lblFondo_2 = new JLabel("");
 		lblFondo_2.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
@@ -844,4 +919,5 @@ public class Principal extends JPanel {
 		}
 
 	}
+
 }
