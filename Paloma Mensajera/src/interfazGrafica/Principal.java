@@ -96,7 +96,9 @@ public class Principal extends JPanel {
 
 	private JTable tableZonas;
 	private DefaultTableModel modelZonas;
-
+	private JTable tablaDist;
+	private JTextField txtRuta;
+	private JButton btnGenerarPdfDistribucion;
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -342,6 +344,7 @@ public class Principal extends JPanel {
 		subPanel.setBounds(27, 48, 644, 87);
 		panelGuia.add(subPanel);
 		subPanel.setLayout(null);
+		
 
 		lblNumeroGuia = new JLabel("N\u00FAmero gu\u00EDa");
 		lblNumeroGuia.setForeground(new Color(25, 25, 112));
