@@ -67,7 +67,8 @@ create table DETALLE_ORDEN_SERVICIO (
    ITEM                 VARCHAR(30)          not null,
    ID_EMBALAJE          INT4                 not null,
    PRECIO_INDIVIDUAL    FLOAT8               not null,
-   PESO                 FLOAT8               not null,
+   PESO                 FLOAT(2)              not null,
+   ESTADO_GUIA          BOOLEAN               not null,
    constraint PK_DETALLE_ORDEN_SERVICIO primary key (ID_ORDEN_SERVICIO, ITEM)
 );
 
@@ -155,7 +156,7 @@ create table GUIA (
    ID_ORDEN_SERVICIO    INT4                 null,
    ITEM                 VARCHAR(30)          null,
    ID_ASEGURADORA       INT4                 null,
-   ID_ZONA_ENTREGA      INT4                 not null,
+   ID_ZONA_ENTREGA      INT4                 null,
    ID_EMPLEADO          INT4                 not null,
    PRECIO_TOTAL_ENVIO   FLOAT8               not null,
    FECHA_CREACION       DATE                 not null,

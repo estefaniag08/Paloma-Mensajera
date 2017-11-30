@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import persistencia.FacadeOrdenes;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -41,10 +42,10 @@ public class BuscarOrdenes extends JFrame {
 	private String item;
 	private String cliente;
 	
-	public static void main(String[] args) {
-		BuscarOrdenes b = new BuscarOrdenes(null);
-		b.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		BuscarOrdenes b = new BuscarOrdenes(null);
+//		b.setVisible(true);
+//	}
 
 	public BuscarOrdenes(Principal ventana) {
 		this.ventana = ventana;
@@ -140,6 +141,16 @@ public class BuscarOrdenes extends JFrame {
 		this.ventana.getTxtPrecioPeso().setText(precio);
 		this.ventana.getBtnCalcularPrecioSegun().setEnabled(false);
 		this.ventana.getTxtCliente().setText(cliente);
+		this.ventana.cargarBoxAseguradora();
+		this.ventana.cargarBoxEmbalaje();
+		
+		int numeroGuia = (int) (Math.random() * (999 - 100) + 100);
+		this.ventana.getTxtNumguia().setText(String.valueOf(numeroGuia));
+		this.ventana.getBoxAseguradora().setEnabled(true);
+		this.ventana.getBoxDelicado().setEnabled(true);
+		this.ventana.getBoxEmbalaje().setEnabled(true);
+		this.ventana.getBtnCalcularPrecioSegun().setEnabled(true);
+		this.ventana.getBtnGenerarGuaPendiente().setEnabled(true);
 		dispose();
 	}
 
@@ -173,6 +184,7 @@ public class BuscarOrdenes extends JFrame {
 			this.idOrden = idOrden;
 			ResultSet rs = FacadeOrdenes.consultarDetalles(idOrden);
 			Boolean apuntador = rs.next();
+			if(apuntador==false) JOptionPane.showMessageDialog(null, "Todos los detalles de esta orden ser servicio han sido asignados en guías");
 			while (apuntador) {
 				String[] fila = new String[4];
 				for (int i = 0; i < 4; i++) {

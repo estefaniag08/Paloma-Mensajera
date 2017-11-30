@@ -19,8 +19,8 @@ public class GestorOrdenServicio extends GestorTabla{
 	}
 	
 	public ResultSet buscarDetalles(String idOrden) throws SQLException {
-		String consulta = "select d.item, e.nombre_embalaje,d.precio_individual,d.peso from (detalle_orden_servicio d left join guia g on (g.item = d.item and " + 
-				" g.id_orden_servicio = d.id_orden_servicio)) inner join tipo_embalaje e on d.id_embalaje = e.id_embalaje and  d.id_orden_servicio = '"+idOrden+"';";
+		String consulta = "select d.item, e.nombre_embalaje,d.precio_individual,d.peso from detalle_orden_servicio d, tipo_embalaje e where d.id_embalaje"
+				+ " = e.id_embalaje and d.estado_guia = false and d.id_orden_servicio = '"+idOrden+"';";
 		Statement declaracion = this.gestor.getConector().createStatement();
 		ResultSet rs = declaracion.executeQuery(consulta);
 		return rs;
