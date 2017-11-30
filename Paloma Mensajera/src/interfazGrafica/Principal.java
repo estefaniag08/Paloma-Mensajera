@@ -102,6 +102,7 @@ public class Principal extends JPanel {
 	private JTextField txtRuta;
 	private JButton btnGenerarPdfDistribucion;
 	private JComboBox BoxZonas;
+	private JTextField txtDestinatario;
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -537,6 +538,17 @@ public class Principal extends JPanel {
 		txtPrecioPeso.setBounds(451, 291, 86, 20);
 		panelGuia.add(txtPrecioPeso);
 		txtPrecioPeso.setColumns(10);
+		
+		txtDestinatario = new JTextField();
+		txtDestinatario.setBounds(160, 285, 177, 20);
+		panelGuia.add(txtDestinatario);
+		txtDestinatario.setColumns(10);
+		
+		JLabel lblDestinatario = new JLabel("Destinatario");
+		lblDestinatario.setForeground(new Color(70, 130, 180));
+		lblDestinatario.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblDestinatario.setBounds(72, 285, 89, 20);
+		panelGuia.add(lblDestinatario);
 
 		lblFondo_1 = new JLabel("");
 		lblFondo_1.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));

@@ -50,6 +50,7 @@ public class GuiaFinal extends JFrame {
 
 
 	private ResultSet datos;
+	private JTextField destinatario;
 
 	private void generarPdf() {
 		String ruta = txtRuta.getText();
@@ -69,6 +70,7 @@ public class GuiaFinal extends JFrame {
 			list.add(new ListItem("Fecha: " + txtFecha.getText()));
 			list.add(new ListItem("Peso: " + txtPeso.getText()));
 			list.add(new ListItem("Cliente: " + txtCliente.getText()));
+			list.add(new ListItem("Destinatario: " +destinatario.getText()));
 			list.add(new ListItem("Embalaje: " + txtEmbalaje.getText()));
 			list.add(new ListItem("Aseguradora: " + txtAseguradora.getText()));
 			list.add(new ListItem("Delicado: " + txtDelicado.getText()));
@@ -128,7 +130,7 @@ public class GuiaFinal extends JFrame {
 	public GuiaFinal(ResultSet datos) {
 		this.datos = datos;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 486, 472);
+		setBounds(100, 100, 486, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -138,7 +140,7 @@ public class GuiaFinal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(230, 230, 250));
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setBounds(65, 22, 335, 326);
+		panel.setBounds(65, 22, 335, 368);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -189,18 +191,30 @@ public class GuiaFinal extends JFrame {
 		label_7.setFont(new Font("Agency FB", Font.BOLD, 20));
 		label_7.setBounds(10, 71, 73, 23);
 		panel.add(label_7);
+		
+		JLabel lblDestinatario = new JLabel("Destinatario");
+		lblDestinatario.setForeground(new Color(70, 130, 180));
+		lblDestinatario.setFont(new Font("Agency FB", Font.BOLD, 20));
+		lblDestinatario.setBounds(10, 267, 79, 20);
+		panel.add(lblDestinatario);
 
 		JLabel lblTotalPorPeso = new JLabel("Total por peso");
 		lblTotalPorPeso.setForeground(new Color(25, 25, 112));
 		lblTotalPorPeso.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblTotalPorPeso.setBounds(10, 265, 89, 23);
+		lblTotalPorPeso.setBounds(10, 303, 89, 23);
 		panel.add(lblTotalPorPeso);
 
 		JLabel lblTotalIva = new JLabel("Total + iva + distancia");
 		lblTotalIva.setForeground(new Color(25, 25, 112));
 		lblTotalIva.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblTotalIva.setBounds(10, 296, 145, 23);
+		lblTotalIva.setBounds(10, 334, 145, 23);
 		panel.add(lblTotalIva);
+		
+		destinatario = new JTextField();
+		destinatario.setEditable(false);
+		destinatario.setBounds(189, 269, 109, 20);
+		panel.add(destinatario);
+		destinatario.setColumns(10);
 
 		txtNumGuia = new JTextField();
 		txtNumGuia.setText("1");
@@ -270,7 +284,7 @@ public class GuiaFinal extends JFrame {
 		txtTotalPeso.setText("9");
 		txtTotalPeso.setEditable(false);
 		txtTotalPeso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		txtTotalPeso.setBounds(189, 269, 109, 20);
+		txtTotalPeso.setBounds(189, 307, 109, 20);
 		panel.add(txtTotalPeso);
 		txtTotalPeso.setColumns(10);
 
@@ -278,13 +292,13 @@ public class GuiaFinal extends JFrame {
 		txtTotalFinal.setText("0");
 		txtTotalFinal.setEditable(false);
 		txtTotalFinal.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		txtTotalFinal.setBounds(189, 299, 109, 20);
+		txtTotalFinal.setBounds(189, 337, 109, 20);
 		panel.add(txtTotalFinal);
 		txtTotalFinal.setColumns(10);
 
 		JLabel lblFondo_1 = new JLabel("");
 		lblFondo_1.setIcon(new ImageIcon(GuiaFinal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
-		lblFondo_1.setBounds(0, 0, 335, 326);
+		lblFondo_1.setBounds(0, 0, 335, 364);
 		panel.add(lblFondo_1);
 
 		JButton btnNewButton = new JButton("Generar PDF");
@@ -295,11 +309,11 @@ public class GuiaFinal extends JFrame {
 		});
 
 		txtRuta = new JTextField();
-		txtRuta.setBounds(65, 368, 214, 20);
+		txtRuta.setBounds(67, 401, 214, 20);
 		contentPane.add(txtRuta);
 		txtRuta.setColumns(10);
 		btnNewButton.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnNewButton.setBounds(112, 399, 112, 23);
+		btnNewButton.setBounds(114, 432, 112, 23);
 		contentPane.add(btnNewButton);
 
 		JButton btnSalir = new JButton("Salir");
@@ -309,7 +323,7 @@ public class GuiaFinal extends JFrame {
 			}
 		});
 		btnSalir.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnSalir.setBounds(258, 399, 89, 23);
+		btnSalir.setBounds(260, 432, 89, 23);
 		contentPane.add(btnSalir);
 
 		JButton btnBuscar = new JButton("Buscar");
@@ -319,11 +333,11 @@ public class GuiaFinal extends JFrame {
 				buscarRuta();
 			}
 		});
-		btnBuscar.setBounds(289, 367, 89, 23);
+		btnBuscar.setBounds(291, 400, 89, 23);
 		contentPane.add(btnBuscar);
 
 		JLabel lblFondo = new JLabel("");
-		lblFondo.setBounds(-182, -51, 693, 489);
+		lblFondo.setBounds(-150, -40, 693, 506);
 		lblFondo.setIcon(new ImageIcon(GuiaFinal.class.getResource("/RecursosInterfaz/Fondo.png")));
 		contentPane.add(lblFondo);
 
