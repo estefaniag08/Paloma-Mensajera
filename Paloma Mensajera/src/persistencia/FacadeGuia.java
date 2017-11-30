@@ -1,5 +1,6 @@
 package persistencia;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import logica.Guia;
@@ -14,4 +15,18 @@ public class FacadeGuia {
 		gi.insertarGuia(guia);
 	}
 
+	public static ResultSet consultarGuiaSinZona() throws SQLException {
+		GestorGuia gi = new GestorGuia();
+		return gi.consultarGuiasSinZona();
+	}
+	
+	public static void zonificarGuia(String idGuia,String idZona) throws SQLException {
+		GestorGuia gi = new GestorGuia();
+		gi.zonificarGuia(idGuia, idZona);
+	}
+	
+	public static ResultSet getGuia(String idGuia) throws SQLException{
+		GestorGuia gi = new GestorGuia();
+		return gi.getGuia(idGuia);
+	}
 }
