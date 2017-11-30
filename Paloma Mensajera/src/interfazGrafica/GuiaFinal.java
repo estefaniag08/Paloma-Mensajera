@@ -6,14 +6,28 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class GuiaFinal extends JFrame {
@@ -30,6 +44,7 @@ public class GuiaFinal extends JFrame {
 	private JTextField txtTotalPeso;
 	private JTextField txtTotalFinal;
 	private static GuiaFinal frame;
+	private JTextField txtRuta;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -43,17 +58,55 @@ public class GuiaFinal extends JFrame {
 			}
 		});
 	}
-
+	
+	 
 	private void generarPdf(){
+		String ruta=txtRuta.getText();
+		String contenido=txtPeso.getText();
+		
+		try{
+			FileOutputStream archivo = new FileOutputStream(ruta+".PDF");
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			
+			doc.open();
+			doc.add(new Paragraph("Numero Guia: " + txtNumGuia.getText()));
+			List list = new List();
+			List lista = new List();
+			lista.setSymbolIndent(12);
+			lista.setListSymbol("\u2022");
+			list.add(new ListItem("Fecha: " + txtFecha.getText()));
+			list.add(new ListItem("Peso: " + txtPeso.getText()));
+			list.add(new ListItem("Cliente: " + txtCliente.getText()));
+			list.add(new ListItem("Embalaje: " + txtEmbalaje.getText()));
+			list.add(new ListItem("Aseguradora: " + txtAseguradora.getText()));
+			list.add(new ListItem("Delicado: " + txtDelicado.getText()));
+			list.add(new ListItem("Total x peso: " + txtTotalPeso.getText()));
+			list.add(new ListItem("Total Final: " + txtTotalFinal.getText()));
+			doc.add(list);
+			doc.close();
+			JOptionPane.showMessageDialog(null, "PDF creado");
+			
+		} catch (Exception e) {
+			
+		}
 		
 	}
 	
+	private void buscarRuta(){
+		JFileChooser dlg = new JFileChooser();
+		int option = dlg.showSaveDialog(dlg);
+		if(option == JFileChooser.APPROVE_OPTION){
+			File f= dlg.getSelectedFile();
+			txtRuta.setText(f.toString());
+		}	
+	}
 	private void salirDeVentana(){
 		frame.dispose();
 	}
 	public GuiaFinal() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 486, 441);
+		setBounds(100, 100, 486, 472);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -127,6 +180,7 @@ public class GuiaFinal extends JFrame {
 		panel.add(lblTotalIva);
 		
 		txtNumGuia = new JTextField();
+		txtNumGuia.setText("1");
 		txtNumGuia.setEditable(false);
 		txtNumGuia.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtNumGuia.setBounds(189, 7, 86, 20);
@@ -134,6 +188,7 @@ public class GuiaFinal extends JFrame {
 		txtNumGuia.setColumns(10);
 		
 		txtFecha = new JTextField();
+		txtFecha.setText("2");
 		txtFecha.setEditable(false);
 		txtFecha.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtFecha.setBounds(189, 41, 86, 20);
@@ -141,6 +196,7 @@ public class GuiaFinal extends JFrame {
 		txtFecha.setColumns(10);
 		
 		txtEmpleado = new JTextField();
+		txtEmpleado.setText("3");
 		txtEmpleado.setEditable(false);
 		txtEmpleado.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtEmpleado.setBounds(189, 72, 86, 20);
@@ -148,6 +204,7 @@ public class GuiaFinal extends JFrame {
 		txtEmpleado.setColumns(10);
 		
 		txtAseguradora = new JTextField();
+		txtAseguradora.setText("4");
 		txtAseguradora.setEditable(false);
 		txtAseguradora.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtAseguradora.setBounds(189, 112, 86, 20);
@@ -155,6 +212,7 @@ public class GuiaFinal extends JFrame {
 		txtAseguradora.setColumns(10);
 		
 		txtPeso = new JTextField();
+		txtPeso.setText("5");
 		txtPeso.setEditable(false);
 		txtPeso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtPeso.setBounds(189, 144, 86, 20);
@@ -162,6 +220,7 @@ public class GuiaFinal extends JFrame {
 		txtPeso.setColumns(10);
 		
 		txtCliente = new JTextField();
+		txtCliente.setText("6");
 		txtCliente.setEditable(false);
 		txtCliente.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtCliente.setBounds(189, 176, 86, 20);
@@ -169,6 +228,7 @@ public class GuiaFinal extends JFrame {
 		txtCliente.setColumns(10);
 		
 		txtEmbalaje = new JTextField();
+		txtEmbalaje.setText("7");
 		txtEmbalaje.setEditable(false);
 		txtEmbalaje.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtEmbalaje.setBounds(189, 207, 86, 20);
@@ -176,6 +236,7 @@ public class GuiaFinal extends JFrame {
 		txtEmbalaje.setColumns(10);
 		
 		txtDelicado = new JTextField();
+		txtDelicado.setText("8");
 		txtDelicado.setEditable(false);
 		txtDelicado.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtDelicado.setBounds(189, 238, 86, 20);
@@ -183,6 +244,7 @@ public class GuiaFinal extends JFrame {
 		txtDelicado.setColumns(10);
 		
 		txtTotalPeso = new JTextField();
+		txtTotalPeso.setText("9");
 		txtTotalPeso.setEditable(false);
 		txtTotalPeso.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtTotalPeso.setBounds(189, 269, 86, 20);
@@ -190,6 +252,7 @@ public class GuiaFinal extends JFrame {
 		txtTotalPeso.setColumns(10);
 		
 		txtTotalFinal = new JTextField();
+		txtTotalFinal.setText("0");
 		txtTotalFinal.setEditable(false);
 		txtTotalFinal.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		txtTotalFinal.setBounds(189, 299, 86, 20);
@@ -207,8 +270,13 @@ public class GuiaFinal extends JFrame {
 				generarPdf();
 			}
 		});
+		
+		txtRuta = new JTextField();
+		txtRuta.setBounds(65, 368, 214, 20);
+		contentPane.add(txtRuta);
+		txtRuta.setColumns(10);
 		btnNewButton.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnNewButton.setBounds(111, 359, 112, 23);
+		btnNewButton.setBounds(112, 399, 112, 23);
 		contentPane.add(btnNewButton);
 		
 		JButton btnSalir = new JButton("Salir");
@@ -218,8 +286,18 @@ public class GuiaFinal extends JFrame {
 			}
 		});
 		btnSalir.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnSalir.setBounds(257, 359, 89, 23);
+		btnSalir.setBounds(258, 399, 89, 23);
 		contentPane.add(btnSalir);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				buscarRuta();
+			}
+		});
+		btnBuscar.setBounds(289, 367, 89, 23);
+		contentPane.add(btnBuscar);
 		
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setBounds(-182, -51, 693, 489);
