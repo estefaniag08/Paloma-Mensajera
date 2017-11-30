@@ -161,6 +161,7 @@ create table GUIA (
    PRECIO_TOTAL_ENVIO   FLOAT8               not null,
    FECHA_CREACION       DATE                 not null,
    DELICADO             BOOL                 not null,
+   ESTADO_DIST          BOOLEAN              not null,
    constraint PK_GUIA primary key (CONSECUTIVO)
 );
 
@@ -266,7 +267,6 @@ create table SEGUIMIENTO (
    ID_TIPO_PROCESO      INT4                 not null,
    ID_MENSAJERO     INT4                 not null,
    ID_AGENTE            INT4                 not null,
-   ESTADO_SEGUIMIENTO   VARCHAR(20)          not null,
    constraint PK_SEGUIMIENTO primary key (ID_SEGUIMIENTO)
 );
 
@@ -333,7 +333,7 @@ ID_EMBALAJE
 /*==============================================================*/
 create table TIPO_PROCESO (
    ID_TIPO_PROCESO      INT4                 not null,
-   NOMBRE_PROCESO       VARCHAR(15)          not null,
+   NOMBRE_PROCESO       VARCHAR(50)          not null,
    constraint PK_TIPO_PROCESO primary key (ID_TIPO_PROCESO)
 );
 
@@ -349,8 +349,8 @@ ID_TIPO_PROCESO
 /*==============================================================*/
 create table TIPO_RESULTADO (
    ID_TIPO_RESULTADO    INT4                 not null,
-   NOMBRE_RESULTADO     VARCHAR(15)          null,
-   DESCRIPCION_RESULTADO VARCHAR(30)          null,
+   NOMBRE_RESULTADO     VARCHAR(50)          null,
+   DESCRIPCION_RESULTADO VARCHAR(80)          null,
    constraint PK_TIPO_RESULTADO primary key (ID_TIPO_RESULTADO)
 );
 

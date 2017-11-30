@@ -185,7 +185,7 @@ public class BuscarOrdenes extends JFrame {
 			this.idOrden = idOrden;
 			ResultSet rs = FacadeOrdenes.consultarDetalles(idOrden);
 			Boolean apuntador = rs.next();
-			if(apuntador==false) JOptionPane.showMessageDialog(null, "Todos los detalles de esta orden ser servicio han sido asignados en guías");
+			if(apuntador==false) JOptionPane.showMessageDialog(null, "Todos los detalles de esta orden de servicio han sido asignados en guías");
 			while (apuntador) {
 				String[] fila = new String[4];
 				for (int i = 0; i < 4; i++) {

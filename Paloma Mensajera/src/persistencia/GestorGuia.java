@@ -14,9 +14,9 @@ public class GestorGuia extends GestorTabla{
 	
 	public void insertarGuia(Guia guia) throws SQLException {
 		String consulta = "insert into guia values('"+guia.getId()+"','"+guia.getIdEmbalaje()+"','"+guia.getOrden().getId()+"'"
-				+ ",'"+guia.getItem()+"',"+guia.getAseguradora()+",null,"+guia.getempleado()+","+guia.getPrecioTotal()+",current_date,"+guia.getDelicado()+");";
+				+ ",'"+guia.getItem()+"',"+guia.getAseguradora()+",null,"+guia.getempleado()+","+guia.getPrecioTotal()+",current_date,"+guia.getDelicado()+",false);";
 		String consulta1 = "update detalle_orden_servicio d set estado_guia = true where d.id_orden_servicio = '"+guia.getOrden().getId()+"'"
-				+ " and d.item = '"+guia.getItem()+"'";
+				+ " and d.item = '"+guia.getItem()+"';";
 		Statement declaracion = this.gestor.getConector().createStatement();
 		declaracion.execute(consulta);
 		declaracion.execute(consulta1);
@@ -55,6 +55,13 @@ public class GestorGuia extends GestorTabla{
 				" guia g, empleado em, aseguradora a, detalle_orden_servicio d, cliente c, tipo_embalaje e, orden_servicio o where g.id_empleado = em.id_empleado and " + 
 				" g.id_aseguradora = a.id_aseguradora and e.id_embalaje = g.id_embalaje and g.item = d.item and g.id_orden_servicio = " + 
 				" d.id_orden_servicio and o.id_orden_servicio = d.id_orden_servicio and o.cedula_cliente = c.cedula_cliente and g.id_zona_entrega = '"+idZona+"';";
+		Statement declaracion = this.gestor.getConector().createStatement();
+		return declaracion.executeQuery(consulta);
+	}
+	
+	public ResultSet getGuiasDist() throws SQLException {
+		String consulta = "select g.consecutivo,g.item,g.fecha_creacion,g.id_zona_entrega || ' - ' || z.nombre from guia g, zona z where "
+				+ " g.id_zona_entrega = z.id_zona and g.estado_dist = false;";
 		Statement declaracion = this.gestor.getConector().createStatement();
 		return declaracion.executeQuery(consulta);
 	}

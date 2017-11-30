@@ -34,4 +34,9 @@ public class FacadeGuia {
 		GestorGuia gi = new GestorGuia();
 		return gi.getGuiasPorZona(idZona);
 	}
+	
+	public static ResultSet getGuiasDist() throws SQLException {
+		GestorGuia gi = new GestorGuia();
+		return gi.getGuiasDist();
+	}
 }

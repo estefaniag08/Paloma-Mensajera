@@ -15,11 +15,13 @@ import com.itextpdf.text.pdf.PdfWriter;
 import logica.EmpleadoLoggeado;
 import logica.Guia;
 import logica.OrdenServicio;
+import persistencia.FacadeAgente;
 import persistencia.FacadeAseguradora;
 import persistencia.FacadeEmbalaje;
 import persistencia.FacadeEmpleado;
 import persistencia.FacadeGuia;
 import persistencia.FacadeOrdenes;
+import persistencia.FacadeSeguimiento;
 import persistencia.FacadeZona;
 
 import java.awt.*;
@@ -76,24 +78,18 @@ public class Principal extends JPanel {
 	private JLabel lblSeleccionarGua;
 	private JScrollPane scrollPane_2;
 	private JButton btnSeleccionar_4;
-	private JButton btnActualizar;
+	private JButton btnSeguimiento;
 	private JPanel panelSeg;
 	private JLabel lblId;
 	private JLabel lblAgente;
-	private JLabel lblTipoProceso;
-	private JLabel lblResultado;
-	private JLabel lblEstadoSeguimiento;
 	private JTextField txtIdSeg;
-	private JTextField txtAgente;
-	private JTextField txtResultado;
-	private JTextField txtEstadoSeguimiento;
-	private JTextField txtProceso;
 	private JButton btnCalcularPrecioSegun;
 	private JTextField txtPrecioPeso;
 	private JTextField txtOrden;
 	private JTextField txtItemOrden;
 
-	private JTable table;
+	private JTable tableGuiaDist;
+	private DefaultTableModel modelGuiaDist;
 
 	private JTable tableZonas;
 	private DefaultTableModel modelZonas;
@@ -103,8 +99,11 @@ public class Principal extends JPanel {
 	private JButton btnGenerarPdfDistribucion;
 	private JComboBox BoxZonas;
 	private JTextField txtDestinatario;
+	private JComboBox BoxAgentes;
 
 	public Principal(Frame container) {
+		
+		
 		generarPanel();
 		this.frameContainer = container;
 		String[] header = { "ID", "TIPO", "NOMBRE", "RURAL/URBANO", "LATITUD", "LONGITUD", "REGIÃ“N" };
@@ -117,6 +116,8 @@ public class Principal extends JPanel {
 		String[][] datos = {};
 		modelDist = new nonEditableModel(cabezera, datos);
 		tablaDist.setModel(modelDist);
+		
+		
 		
 	}
 
@@ -209,7 +210,7 @@ public class Principal extends JPanel {
 			String idGuia = txtNumeroGuia.getText();
 			try {
 				FacadeGuia.zonificarGuia(idGuia, idZona);
-				JOptionPane.showMessageDialog(null, "La guÃ­a ha sido zonificada");
+				JOptionPane.showMessageDialog(null, "La guía ha sido zonificada");
 				this.frameContainer.remove(this);
 				Principal nuevaVentana = new Principal(frameContainer);
 				frameContainer.add(nuevaVentana);
@@ -258,8 +259,20 @@ public class Principal extends JPanel {
 	}
 
 	/** MÃ©todo que genera la lista de guias */
-	private void actualizarListaGuiasSeg() {
-
+	private void insertarSeguimiento() {
+		
+		try {
+			int row = tableGuiaDist.getSelectedRow();
+			String idGuia = (String) tableGuiaDist.getValueAt(row,0);
+			FacadeSeguimiento.insertarSeguimiento(txtIdSeg.getText(),BoxAgentes.getSelectedItem().toString().split(" - ")[0], idGuia);
+		    JOptionPane.showMessageDialog(null,"El seguimiento ha sido activado para esta guía");
+			this.frameContainer.remove(this);
+			Principal nuevaVentana = new Principal(frameContainer);
+			frameContainer.add(nuevaVentana);
+			nuevaVentana.setBounds(0, 0, 850, 530);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** MÃ©todo que seleccionar guia para ver su seguimiento */
@@ -307,6 +320,18 @@ public class Principal extends JPanel {
 		}
 		
 	}
+	
+	public void cargarAgentes() {
+		try {
+			BoxAgentes.addItem("");
+			ResultSet rs = FacadeAgente.obtenerRegistros();
+			while(rs.next()) {
+				BoxAgentes.addItem(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error: "+e.getMessage());
+		}
+	}
 
 	private void buscarRuta() {
 		JFileChooser dlg = new JFileChooser();
@@ -336,6 +361,25 @@ public class Principal extends JPanel {
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
+	
+	public void cargarGuiasDist() {
+		try {
+			ResultSet rs = FacadeGuia.getGuiasDist();
+			Boolean apuntador = rs.next();
+			while (apuntador) {
+				String[] fila = new String[4];
+				for (int i = 0; i < 4; i++) {
+					fila[i] = rs.getString(i + 1);
+				}
+				modelGuiaDist.addRow(fila);
+				apuntador = rs.next();
+			}
+			tableGuiaDist.setModel(modelGuiaDist);
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
 
 	private void vaciarTabla(DefaultTableModel model) {
 		for (int i = 0; i < model.getRowCount(); i++) {
@@ -350,7 +394,9 @@ public class Principal extends JPanel {
 			String idZona = BoxZonas.getSelectedItem().toString().split(" - ")[0];
 			ResultSet rs = FacadeGuia.getGuiasPorZona(idZona);
 			Boolean apuntador = rs.next();
-			if(apuntador==false) return;
+			if(apuntador==false) {
+				JOptionPane.showMessageDialog(null,"No existen guias en el momento para esta zona");
+			}
 			else {
 				while(apuntador) {
 					String[] fila = new String[10];
@@ -702,13 +748,19 @@ public class Principal extends JPanel {
 		scrollPane_2.setBounds(23, 67, 213, 222);
 		panelSeguimiento.add(scrollPane_2);
 
-		table = new JTable();
-		scrollPane_2.setViewportView(table);
+		tableGuiaDist = new JTable();
+		tableGuiaDist.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				txtIdSeg.setText(String.valueOf((int) (Math.random() * (999 - 100) + 100)));
+			}
+		});
+		scrollPane_2.setViewportView(tableGuiaDist);
 
-		lblSeleccionarGua = new JLabel("Seleccionar gu\u00EDa");
+		lblSeleccionarGua = new JLabel("Gu\u00EDas sin distribuir:");
 		lblSeleccionarGua.setForeground(new Color(25, 25, 112));
 		lblSeleccionarGua.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblSeleccionarGua.setBounds(78, 33, 112, 23);
+		lblSeleccionarGua.setBounds(64, 33, 136, 23);
 		panelSeguimiento.add(lblSeleccionarGua);
 
 		panelSeg = new JPanel();
@@ -730,63 +782,26 @@ public class Principal extends JPanel {
 		lblAgente.setBounds(23, 62, 89, 23);
 		panelSeg.add(lblAgente);
 
-		lblTipoProceso = new JLabel("Proceso actual");
-		lblTipoProceso.setForeground(new Color(70, 130, 180));
-		lblTipoProceso.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblTipoProceso.setBounds(23, 102, 102, 23);
-		panelSeg.add(lblTipoProceso);
-
-		lblResultado = new JLabel("Resultado");
-		lblResultado.setForeground(new Color(70, 130, 180));
-		lblResultado.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblResultado.setBounds(23, 146, 89, 23);
-		panelSeg.add(lblResultado);
-
-		lblEstadoSeguimiento = new JLabel("Estado seguimiento");
-		lblEstadoSeguimiento.setForeground(new Color(70, 130, 180));
-		lblEstadoSeguimiento.setFont(new Font("Agency FB", Font.BOLD, 20));
-		lblEstadoSeguimiento.setBounds(23, 192, 120, 23);
-		panelSeg.add(lblEstadoSeguimiento);
-
 		txtIdSeg = new JTextField();
 		txtIdSeg.setEditable(false);
 		txtIdSeg.setBounds(169, 24, 86, 20);
 		panelSeg.add(txtIdSeg);
 		txtIdSeg.setColumns(10);
+		
+		BoxAgentes = new JComboBox();
+		BoxAgentes.setBounds(169, 62, 142, 20);
+		panelSeg.add(BoxAgentes);
+		cargarAgentes();
 
-		txtAgente = new JTextField();
-		txtAgente.setEditable(false);
-		txtAgente.setBounds(169, 62, 137, 20);
-		panelSeg.add(txtAgente);
-		txtAgente.setColumns(10);
-
-		txtResultado = new JTextField();
-		txtResultado.setEditable(false);
-		txtResultado.setBounds(169, 146, 137, 20);
-		panelSeg.add(txtResultado);
-		txtResultado.setColumns(10);
-
-		txtEstadoSeguimiento = new JTextField();
-		txtEstadoSeguimiento.setEditable(false);
-		txtEstadoSeguimiento.setBounds(169, 192, 137, 20);
-		panelSeg.add(txtEstadoSeguimiento);
-		txtEstadoSeguimiento.setColumns(10);
-
-		txtProceso = new JTextField();
-		txtProceso.setEditable(false);
-		txtProceso.setBounds(169, 102, 137, 20);
-		panelSeg.add(txtProceso);
-		txtProceso.setColumns(10);
-
-		btnActualizar = new JButton("Actualizar");
-		btnActualizar.addActionListener(new ActionListener() {
+		btnSeguimiento = new JButton("Iniciar Seguimiento");
+		btnSeguimiento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actualizarListaGuiasSeg();
+				insertarSeguimiento();
 			}
 		});
-		btnActualizar.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnActualizar.setBounds(78, 300, 119, 23);
-		panelSeguimiento.add(btnActualizar);
+		btnSeguimiento.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnSeguimiento.setBounds(78, 300, 119, 23);
+		panelSeguimiento.add(btnSeguimiento);
 
 		btnSeleccionar_4 = new JButton("Seleccionar");
 		btnSeleccionar_4.addActionListener(new ActionListener() {
@@ -810,6 +825,16 @@ public class Principal extends JPanel {
 		
 		//se carga el combo box de las zonas en el panel distribución
 		cargarBoxZonas();
+		//se cargan las guias pendientes de distribucion
+		
+		
+		String[] header1 = { "ID", "ITEM", "FECHA CREACIÓN", "ZONA"};
+		String[][] datos1 = {};
+		modelGuiaDist = new nonEditableModel(header1, datos1);
+		tableGuiaDist.setModel(modelGuiaDist);
+		
+		
+		cargarGuiasDist();
 	}
 
 	public JButton getBtnGenerarGuiaFinal() {
@@ -894,38 +919,6 @@ public class Principal extends JPanel {
 
 	public void setTxtIdSeg(JTextField txtIdSeg) {
 		this.txtIdSeg = txtIdSeg;
-	}
-
-	public JTextField getTxtAgente() {
-		return txtAgente;
-	}
-
-	public void setTxtAgente(JTextField txtAgente) {
-		this.txtAgente = txtAgente;
-	}
-
-	public JTextField getTxtResultado() {
-		return txtResultado;
-	}
-
-	public void setTxtResultado(JTextField txtResultado) {
-		this.txtResultado = txtResultado;
-	}
-
-	public JTextField getTxtEstadoSeguimiento() {
-		return txtEstadoSeguimiento;
-	}
-
-	public void setTxtEstadoSeguimiento(JTextField txtEstadoSeguimiento) {
-		this.txtEstadoSeguimiento = txtEstadoSeguimiento;
-	}
-
-	public JTextField getTxtProceso() {
-		return txtProceso;
-	}
-
-	public void setTxtProceso(JTextField txtProceso) {
-		this.txtProceso = txtProceso;
 	}
 
 	public JTextField getTxtPrecioPeso() {
