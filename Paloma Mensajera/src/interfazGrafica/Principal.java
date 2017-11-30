@@ -3,6 +3,7 @@ package interfazGrafica;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
+import javax.swing.table.DefaultTableModel;
 
 import logica.EmpleadoLoggeado;
 import logica.Guia;
@@ -12,6 +13,7 @@ import persistencia.FacadeEmbalaje;
 import persistencia.FacadeEmpleado;
 import persistencia.FacadeGuia;
 import persistencia.FacadeOrdenes;
+import persistencia.FacadeZona;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +24,7 @@ import java.util.Random;
 public class Principal extends JPanel {
 
 	private Frame frameContainer;
-	
+
 	private JTextField txtNumguia;
 	private JTextField peso;
 	private JTextField txtCliente;
@@ -50,10 +52,8 @@ public class Principal extends JPanel {
 	private JComboBox BoxEmbalaje;
 	private JComboBox BoxDelicado;
 	private JButton btnSeleccionar_2;
-	private JButton btnZonificar;
 	private JButton btnCrearZona;
 	private JButton btnGenerarGuiaFinal;
-	private JList listaZonas;
 	private JLabel lblGuia;
 	private JTextField txtNumeroGuia;
 	private JPanel panelDistribucion;
@@ -83,11 +83,16 @@ public class Principal extends JPanel {
 	private JTextField txtItemOrden;
 
 	private JTable table;
+	private JTable tableZonas;
+	private DefaultTableModel modelZonas;
 
 	public Principal(Frame container) {
 		generarPanel();
 		this.frameContainer = container;
-
+		String[] header = { "ID", "TIPO", "NOMBRE", "RURAL/URBANO", "LATITUD", "LONGITUD", "REGIÓN" };
+		String[][] data = {};
+		modelZonas = new nonEditableModel(header, data);
+		tableZonas.setModel(modelZonas);
 	}
 
 	/** Metodo para generar limpiar elementos de la guia */
@@ -118,14 +123,14 @@ public class Principal extends JPanel {
 		String delicado = BoxDelicado.getSelectedItem().toString();
 		if (enBlanco(aseguradora) && enBlanco(embalaje) && enBlanco(precio) && enBlanco(delicado)) {
 			switch (delicado) {
-				case "Si":
-					delicado = "true";
+			case "Si":
+				delicado = "true";
 				break;
-				case "No":
-					delicado = "false";
+			case "No":
+				delicado = "false";
 				break;
 			}
-			//Acción de ingreso en base de datos
+			// Acción de ingreso en base de datos
 			Guia guia = new Guia();
 			guia.setId(txtNumguia.getText());
 			guia.setIdEmbalaje(embalaje.split(" - ")[0]);
@@ -137,15 +142,15 @@ public class Principal extends JPanel {
 			guia.setempleado(EmpleadoLoggeado.getInstance().getId());
 			guia.setPrecioTotal(precio);
 			guia.setDelicado(delicado);
-			
+
 			try {
 				FacadeGuia.insertarGuia(guia);
-				JOptionPane.showMessageDialog(null,"Guía creada con éxito");
+				JOptionPane.showMessageDialog(null, "Guía creada con éxito");
 				this.frameContainer.remove(this);
 				Principal nuevaVentana = new Principal(frameContainer);
 				frameContainer.add(nuevaVentana);
 				nuevaVentana.setBounds(0, 0, 850, 530);
-				
+
 			} catch (SQLException e) {
 				System.out.println("Error: " + e.getMessage());
 			}
@@ -164,18 +169,33 @@ public class Principal extends JPanel {
 
 	/** Método que busca las guias pendientes por zonificar */
 	private void seleccionGuiaZonificacion() {
-
-	}
-
-	/** Método que zonifica la guía seleccionada */
-	private void zonificar() {
-
+		BuscarGuiasZonificar ventana = new BuscarGuiasZonificar(this);
+		ventana.setVisible(true);
 	}
 
 	/** Método que genera la guia final con su precio y todo */
 	private void generarGuiaFinal() {
-		GuiaFinal guiaF = new GuiaFinal();
-		guiaF.main(null);
+		int row = tableZonas.getSelectedRow();
+		if (row == -1) {
+			JOptionPane.showMessageDialog(null, "Debe seleccionar una zona");
+		} else {
+			String idZona = (String) tableZonas.getValueAt(row, 0);
+			String idGuia = txtNumeroGuia.getText();
+			try {
+				FacadeGuia.zonificarGuia(idGuia, idZona);
+				JOptionPane.showMessageDialog(null,"La guía ha sido zonificada");
+				this.frameContainer.remove(this);
+				Principal nuevaVentana = new Principal(frameContainer);
+				frameContainer.add(nuevaVentana);
+				nuevaVentana.setBounds(0, 0, 850, 530);
+				GuiaFinal guiaF = new GuiaFinal(FacadeGuia.getGuia(idGuia));
+				guiaF.setVisible(true);
+			} catch (SQLException e) {
+				System.out.println("Error: "+e.getMessage());;
+			}
+			
+		}
+
 	}
 
 	/** Método que filtra las guias segun la ciudad */
@@ -222,6 +242,32 @@ public class Principal extends JPanel {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void cargarZonas() {
+		vaciarTablaZonas();
+		try {
+			ResultSet rs = FacadeZona.consultarZonas();
+			Boolean apuntador = rs.next();
+			while (apuntador) {
+				String[] fila = new String[7];
+				for (int i = 0; i < 7; i++) {
+					fila[i] = rs.getString(i + 1);
+				}
+				modelZonas.addRow(fila);
+				apuntador = rs.next();
+			}
+			tableZonas.setModel(modelZonas);
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
+
+	private void vaciarTablaZonas() {
+		for (int i = 0; i < modelZonas.getRowCount(); i++) {
+			modelZonas.removeRow(0);
 		}
 	}
 
@@ -422,13 +468,13 @@ public class Principal extends JPanel {
 		panelZonificacion.add(panelZonif);
 		panelZonif.setLayout(null);
 
+		tableZonas = new JTable();
+		tableZonas.setBounds(10, 39, 540, 195);
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 39, 540, 195);
 		panelZonif.add(scrollPane);
-
-		listaZonas = new JList();
-		listaZonas.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
-		scrollPane.setViewportView(listaZonas);
+		scrollPane.setViewportView(tableZonas);
 
 		lblGuia = new JLabel("Guia");
 		lblGuia.setForeground(new Color(0, 0, 128));
@@ -459,16 +505,6 @@ public class Principal extends JPanel {
 		btnSeleccionar_2.setBounds(380, 35, 117, 23);
 		panelZonificacion.add(btnSeleccionar_2);
 
-		btnZonificar = new JButton("Zonificar");
-		btnZonificar.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnZonificar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				zonificar();
-			}
-		});
-		btnZonificar.setBounds(155, 334, 89, 30);
-		panelZonificacion.add(btnZonificar);
-
 		btnCrearZona = new JButton("Crear Zona");
 		btnCrearZona.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnCrearZona.addActionListener(new ActionListener() {
@@ -480,6 +516,7 @@ public class Principal extends JPanel {
 		panelZonificacion.add(btnCrearZona);
 
 		btnGenerarGuiaFinal = new JButton("Generar gu\u00EDa final");
+		btnGenerarGuiaFinal.setEnabled(false);
 		btnGenerarGuiaFinal.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnGenerarGuiaFinal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -657,6 +694,10 @@ public class Principal extends JPanel {
 		add(lblFondo);
 	}
 
+	public JButton getBtnGenerarGuiaFinal() {
+		return btnGenerarGuiaFinal;
+	}
+
 	public JButton getBtnGenerarGuaPendiente() {
 		return btnGenerarGuaPendiente;
 	}
@@ -793,4 +834,14 @@ public class Principal extends JPanel {
 		this.btnCalcularPrecioSegun = btnCalcularPrecioSegun;
 	}
 
+	private class nonEditableModel extends DefaultTableModel {
+		public nonEditableModel(Object[] header, Object[][] data) {
+			super(data, header);
+		}
+
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+
+	}
 }
