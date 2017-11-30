@@ -100,6 +100,7 @@ public class Principal extends JPanel {
 	private JComboBox BoxZonas;
 	private JTextField txtDestinatario;
 	private JComboBox BoxAgentes;
+	private JButton btnAgregarEmpleado;
 
 	public Principal(Frame container) {
 		
@@ -120,7 +121,9 @@ public class Principal extends JPanel {
 		
 		
 	}
-
+	private void agregarEmpleado(){
+		
+	}
 	/** Metodo para generar limpiar elementos de la guia */
 	private void generarEnBlanco() {
 		txtNumguia.setText("");
@@ -718,6 +721,15 @@ public class Principal extends JPanel {
 		btnBuscarGuaRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnBuscarGuaRuta.setBounds(435, 24, 164, 23);
 		panelDistribucion.add(btnBuscarGuaRuta);
+		
+		btnAgregarEmpleado = new JButton("Agregar Empleado");
+		btnAgregarEmpleado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				agregarEmpleado();
+			}
+		});
+		btnAgregarEmpleado.setBounds(445, 58, 123, 23);
+		panelDistribucion.add(btnAgregarEmpleado);
 
 		lblFondo_2 = new JLabel("");
 		lblFondo_2.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
