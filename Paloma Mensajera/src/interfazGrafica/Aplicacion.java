@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import logica.EmpleadoLoggeado;
 import persistencia.FacadeEmpleado;
 
 import java.beans.PropertyChangeListener;
@@ -25,7 +26,7 @@ import java.beans.PropertyChangeEvent;
 public class Aplicacion {
 
 	private JFrame frame;
-	private Principal panelPrincipal = new Principal();
+	private Principal panelPrincipal;
 	private JLabel lblIdemp;
 	private JLabel lblContrasena;
 	private JLabel lblInicio;
@@ -58,6 +59,7 @@ public class Aplicacion {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
+		panelPrincipal = new Principal(frame);
 		panelInicioS = new JPanel();
 		setDetails();
 		addToWindow();	
@@ -121,6 +123,7 @@ public class Aplicacion {
 		try {
 			if(FacadeEmpleado.login(id, contrasena)) {
 				JOptionPane.showMessageDialog(null, "Login exitoso");
+				EmpleadoLoggeado.getInstance().setId(txtIdempleado.getText());
 				abrirPrincipal();
 				
 			}
