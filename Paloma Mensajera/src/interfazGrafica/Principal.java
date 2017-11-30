@@ -83,6 +83,7 @@ public class Principal extends JPanel {
 	private JTextField txtItemOrden;
 
 	private JTable table;
+	private JTextField txtRuta;
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -92,11 +93,12 @@ public class Principal extends JPanel {
 
 	/** Metodo para generar limpiar elementos de la guia */
 	private void generarEnBlanco() {
-		/**
-		 * this.numeroGuia = (int) (Math.random() * (999 - 100) + 100); JTextField
-		 * txtNumguia; JTextField peso; JTextField txtCliente; JTextField txtPrecioPeso;
-		 * JTextField txtOrden; JTextField txtItemOrden;
-		 */
+		txtNumguia.setText("");
+		peso.setText("");
+		txtCliente.setText("");
+		txtPrecioPeso.setText("");
+		txtOrden.setText(""); 
+		txtItemOrden.setText("");
 	}
 
 	/** Metodo que busca ordenes pendientes */
@@ -533,8 +535,18 @@ public class Principal extends JPanel {
 			}
 		});
 		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnGenerarPdfDistribucion.setBounds(268, 323, 179, 37);
+		btnGenerarPdfDistribucion.setBounds(459, 316, 179, 37);
 		panelDistribucion.add(btnGenerarPdfDistribucion);
+		
+		JButton btnBuscarRuta = new JButton("Buscar ruta");
+		btnBuscarRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		btnBuscarRuta.setBounds(255, 327, 123, 23);
+		panelDistribucion.add(btnBuscarRuta);
+		
+		txtRuta = new JTextField();
+		txtRuta.setBounds(57, 328, 176, 20);
+		panelDistribucion.add(txtRuta);
+		txtRuta.setColumns(10);
 
 		lblFondo_2 = new JLabel("");
 		lblFondo_2.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo2v23.png")));
@@ -792,5 +804,4 @@ public class Principal extends JPanel {
 	public void setBtnCalcularPrecioSegun(JButton btnCalcularPrecioSegun) {
 		this.btnCalcularPrecioSegun = btnCalcularPrecioSegun;
 	}
-
 }
