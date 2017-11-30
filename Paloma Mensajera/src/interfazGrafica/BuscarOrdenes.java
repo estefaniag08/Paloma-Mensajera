@@ -151,6 +151,7 @@ public class BuscarOrdenes extends JFrame {
 		this.ventana.getBoxEmbalaje().setEnabled(true);
 		this.ventana.getBtnCalcularPrecioSegun().setEnabled(true);
 		this.ventana.getBtnGenerarGuaPendiente().setEnabled(true);
+		this.ventana.getBtnCalcularPrecioSegun().setEnabled(false);
 		dispose();
 	}
 
