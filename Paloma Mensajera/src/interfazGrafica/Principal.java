@@ -258,22 +258,7 @@ public class Principal extends JPanel {
 
 	}
 
-	/** Método que genera la lista de guias */
-	private void insertarSeguimiento() {
-		
-		try {
-			int row = tableGuiaDist.getSelectedRow();
-			String idGuia = (String) tableGuiaDist.getValueAt(row,0);
-			FacadeSeguimiento.insertarSeguimiento(txtIdSeg.getText(),BoxAgentes.getSelectedItem().toString().split(" - ")[0], idGuia);
-		    JOptionPane.showMessageDialog(null,"El seguimiento ha sido activado para esta gu�a");
-			this.frameContainer.remove(this);
-			Principal nuevaVentana = new Principal(frameContainer);
-			frameContainer.add(nuevaVentana);
-			nuevaVentana.setBounds(0, 0, 850, 530);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 
 	/** Método que seleccionar guia para ver su seguimiento */
 	private void seleccionarGuia() {
@@ -794,11 +779,6 @@ public class Principal extends JPanel {
 		cargarAgentes();
 
 		btnSeguimiento = new JButton("Iniciar Seguimiento");
-		btnSeguimiento.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				insertarSeguimiento();
-			}
-		});
 		btnSeguimiento.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnSeguimiento.setBounds(78, 300, 119, 23);
 		panelSeguimiento.add(btnSeguimiento);

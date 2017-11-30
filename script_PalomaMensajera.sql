@@ -263,10 +263,10 @@ ID_RURAL
 create table SEGUIMIENTO (
    ID_SEGUIMIENTO       INT4                 not null,
    ID_AUXILIAR_O         INT4                 null,
-   ID_TIPO_RESULTADO    INT4                 not null,
+   ID_TIPO_RESULTADO    INT4                 null,
    ID_TIPO_PROCESO      INT4                 not null,
-   ID_MENSAJERO     INT4                 not null,
-   ID_AGENTE            INT4                 not null,
+   ID_MENSAJERO     INT4                 	null,
+   ID_AGENTE            INT4                 null,
    constraint PK_SEGUIMIENTO primary key (ID_SEGUIMIENTO)
 );
 

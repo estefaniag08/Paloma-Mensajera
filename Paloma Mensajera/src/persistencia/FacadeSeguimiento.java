@@ -8,8 +8,13 @@ public class FacadeSeguimiento {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void insertarSeguimiento(String id,String idAgente,String idGuia) throws SQLException {
+	public static void seguimientoZonificacion(String idSeguimiento,String idGuia) throws SQLException {
 		GestorSeguimiento gs = new GestorSeguimiento();
-		gs.insertarSeguimiento(id, idAgente, idGuia);
+		gs.seguimientoZonificacion(idSeguimiento, idGuia);
+	}
+	
+	public static void seguimientoDistribucion(String idSeguimiento,String idGuia,String idMensajero,String idAgente) throws SQLException {
+		GestorSeguimiento gs = new GestorSeguimiento();
+		gs.seguimientoDistribución(idSeguimiento, idGuia, idMensajero, idAgente);
 	}
 }
