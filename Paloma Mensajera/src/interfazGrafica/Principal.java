@@ -4,6 +4,13 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ListDataListener;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import logica.EmpleadoLoggeado;
 import logica.Guia;
 import logica.OrdenServicio;
@@ -15,9 +22,12 @@ import persistencia.FacadeOrdenes;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
+import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JPanel {
 
@@ -84,6 +94,7 @@ public class Principal extends JPanel {
 
 	private JTable table;
 	private JTextField txtRuta;
+	private JTable tablaDist;
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -187,6 +198,35 @@ public class Principal extends JPanel {
 
 	/** Método que genera la lista de distribucion */
 	private void generarPdfDistribucion() {
+		String ruta=txtRuta.getText();
+		
+		
+		try{
+			FileOutputStream archivo = new FileOutputStream(ruta+".PDF");
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			
+			doc.open();
+			 PdfPTable pdfTable = new PdfPTable(tablaDist.getColumnCount());
+	            
+	            for (int i = 0; i < tablaDist.getColumnCount(); i++) {
+	                pdfTable.addCell(tablaDist.getColumnName(i));
+	            }
+	           
+	            for (int rows = 0; rows < tablaDist.getRowCount() - 1; rows++) {
+	                for (int cols = 0; cols < tablaDist.getColumnCount(); cols++) {
+	                    pdfTable.addCell(tablaDist.getModel().getValueAt(rows, cols).toString());
+
+	                }
+	            }
+	            doc.add(pdfTable);
+			doc.close();
+			JOptionPane.showMessageDialog(null, "PDF creado");
+			
+		} catch (Exception e) {
+			
+		}
+		
 
 	}
 
@@ -225,6 +265,15 @@ public class Principal extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void buscarRuta(){
+		JFileChooser dlg = new JFileChooser();
+		int option = dlg.showSaveDialog(dlg);
+		if(option == JFileChooser.APPROVE_OPTION){
+			File f= dlg.getSelectedFile();
+			txtRuta.setText(f.toString());
+		}	
 	}
 
 	private void generarPanel() {
@@ -514,9 +563,18 @@ public class Principal extends JPanel {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(57, 90, 581, 215);
 		panelDistribucion.add(scrollPane_1);
-
-		JList listDistrib = new JList();
-		scrollPane_1.setViewportView(listDistrib);
+		
+		tablaDist = new JTable();
+		tablaDist.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"dd", "dd", "eeee"},
+				{"dsdsdwew", "wew", null},
+			},
+			new String[] {
+				"New ewe", "New column", "New column"
+			}
+		));
+		scrollPane_1.setViewportView(tablaDist);
 
 		btnSeleccionar_3 = new JButton("Seleccionar");
 		btnSeleccionar_3.addActionListener(new ActionListener() {
@@ -535,10 +593,15 @@ public class Principal extends JPanel {
 			}
 		});
 		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnGenerarPdfDistribucion.setBounds(459, 316, 179, 37);
+		btnGenerarPdfDistribucion.setBounds(427, 316, 211, 37);
 		panelDistribucion.add(btnGenerarPdfDistribucion);
 		
 		JButton btnBuscarRuta = new JButton("Buscar ruta");
+		btnBuscarRuta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				buscarRuta();
+			}
+		});
 		btnBuscarRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnBuscarRuta.setBounds(255, 327, 123, 23);
 		panelDistribucion.add(btnBuscarRuta);
