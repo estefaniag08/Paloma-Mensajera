@@ -29,4 +29,9 @@ public class FacadeGuia {
 		GestorGuia gi = new GestorGuia();
 		return gi.getGuia(idGuia);
 	}
+	
+	public static ResultSet getGuiasPorZona(String idZona) throws SQLException {
+		GestorGuia gi = new GestorGuia();
+		return gi.getGuiasPorZona(idZona);
+	}
 }

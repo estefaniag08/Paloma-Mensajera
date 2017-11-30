@@ -30,6 +30,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 import javax.swing.table.DefaultTableModel;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class Principal extends JPanel {
 
@@ -71,7 +73,6 @@ public class Principal extends JPanel {
 	private JLabel fondo3;
 	private JLabel lblFondo_2;
 	private JLabel lblFiltrarGuiasPor;
-	private JButton btnSeleccionar_3;
 	private JLabel lblSeleccionarGua;
 	private JScrollPane scrollPane_2;
 	private JButton btnSeleccionar_4;
@@ -97,8 +98,11 @@ public class Principal extends JPanel {
 	private JTable tableZonas;
 	private DefaultTableModel modelZonas;
 	private JTable tablaDist;
+	private DefaultTableModel modelDist;
 	private JTextField txtRuta;
 	private JButton btnGenerarPdfDistribucion;
+	private JComboBox BoxZonas;
+	private final JButton btnBuscarGuiasZona = new JButton("Buscar ruta");
 
 	public Principal(Frame container) {
 		generarPanel();
@@ -107,6 +111,21 @@ public class Principal extends JPanel {
 		String[][] data = {};
 		modelZonas = new nonEditableModel(header, data);
 		tableZonas.setModel(modelZonas);
+		
+		String[] cabezera = { "ID", "FECHA DE CREACI�N", "EMPLEADO ENCARGADO", "ASEGURADORA", "PESO", "CLIENTE", "EMBALAJE",
+				"DELICADO","TOTAL PESO","TOTAL + IVA + DISTANCIA" };
+		String[][] datos = {};
+		modelDist = new nonEditableModel(cabezera, datos);
+		tablaDist.setModel(modelDist);
+		btnBuscarGuiasZona.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cargarGuiasZonas();
+			}
+		});
+		btnBuscarGuiasZona.setBounds(450, 20, 116, 31);
+		panelDistribucion.add(btnBuscarGuiasZona);
+		btnBuscarGuiasZona.setFont(new Font("Agency FB", Font.PLAIN, 20));
+		
 	}
 
 	/** Metodo para generar limpiar elementos de la guia */
@@ -115,7 +134,7 @@ public class Principal extends JPanel {
 		peso.setText("");
 		txtCliente.setText("");
 		txtPrecioPeso.setText("");
-		txtOrden.setText(""); 
+		txtOrden.setText("");
 		txtItemOrden.setText("");
 	}
 
@@ -198,7 +217,7 @@ public class Principal extends JPanel {
 			String idGuia = txtNumeroGuia.getText();
 			try {
 				FacadeGuia.zonificarGuia(idGuia, idZona);
-				JOptionPane.showMessageDialog(null,"La guía ha sido zonificada");
+				JOptionPane.showMessageDialog(null, "La guía ha sido zonificada");
 				this.frameContainer.remove(this);
 				Principal nuevaVentana = new Principal(frameContainer);
 				frameContainer.add(nuevaVentana);
@@ -206,49 +225,43 @@ public class Principal extends JPanel {
 				GuiaFinal guiaF = new GuiaFinal(FacadeGuia.getGuia(idGuia));
 				guiaF.setVisible(true);
 			} catch (SQLException e) {
-				System.out.println("Error: "+e.getMessage());;
+				System.out.println("Error: " + e.getMessage());
+				;
 			}
-			
+
 		}
-
-	}
-
-	/** Método que filtra las guias segun la ciudad */
-	private void filtrarGuiasDistribucion() {
 
 	}
 
 	/** Método que genera la lista de distribucion */
 	private void generarPdfDistribucion() {
-		String ruta=txtRuta.getText();
-		
-		
-		try{
-			FileOutputStream archivo = new FileOutputStream(ruta+".PDF");
+		String ruta = txtRuta.getText();
+
+		try {
+			FileOutputStream archivo = new FileOutputStream(ruta + ".PDF");
 			Document doc = new Document();
 			PdfWriter.getInstance(doc, archivo);
-			
-			doc.open();
-			 PdfPTable pdfTable = new PdfPTable(tablaDist.getColumnCount());
-	            
-	            for (int i = 0; i < tablaDist.getColumnCount(); i++) {
-	                pdfTable.addCell(tablaDist.getColumnName(i));
-	            }
-	           
-	            for (int rows = 0; rows < tablaDist.getRowCount() - 1; rows++) {
-	                for (int cols = 0; cols < tablaDist.getColumnCount(); cols++) {
-	                    pdfTable.addCell(tablaDist.getModel().getValueAt(rows, cols).toString());
 
-	                }
-	            }
-	            doc.add(pdfTable);
+			doc.open();
+			PdfPTable pdfTable = new PdfPTable(tablaDist.getColumnCount());
+
+			for (int i = 0; i < tablaDist.getColumnCount(); i++) {
+				pdfTable.addCell(tablaDist.getColumnName(i));
+			}
+
+			for (int rows = 0; rows < tablaDist.getRowCount() - 1; rows++) {
+				for (int cols = 0; cols < tablaDist.getColumnCount(); cols++) {
+					pdfTable.addCell(tablaDist.getModel().getValueAt(rows, cols).toString());
+
+				}
+			}
+			doc.add(pdfTable);
 			doc.close();
 			JOptionPane.showMessageDialog(null, "PDF creado");
-			
+
 		} catch (Exception e) {
-			
+
 		}
-		
 
 	}
 
@@ -288,18 +301,32 @@ public class Principal extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
-	private void buscarRuta(){
+
+	public void cargarBoxZonas() {
+		
+		try {
+			BoxZonas.addItem("");
+			ResultSet rs = FacadeZona.consultarTodasZonas();
+			while(rs.next()) {
+				BoxZonas.addItem(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error: "+e.getMessage());
+		}
+		
+	}
+
+	private void buscarRuta() {
 		JFileChooser dlg = new JFileChooser();
 		int option = dlg.showSaveDialog(dlg);
-		if(option == JFileChooser.APPROVE_OPTION){
-			File f= dlg.getSelectedFile();
+		if (option == JFileChooser.APPROVE_OPTION) {
+			File f = dlg.getSelectedFile();
 			txtRuta.setText(f.toString());
-		}	
+		}
 	}
 
 	public void cargarZonas() {
-		vaciarTablaZonas();
+		vaciarTabla(modelZonas);
 		try {
 			ResultSet rs = FacadeZona.consultarZonas();
 			Boolean apuntador = rs.next();
@@ -318,9 +345,33 @@ public class Principal extends JPanel {
 		}
 	}
 
-	private void vaciarTablaZonas() {
-		for (int i = 0; i < modelZonas.getRowCount(); i++) {
-			modelZonas.removeRow(0);
+	private void vaciarTabla(DefaultTableModel model) {
+		for (int i = 0; i < model.getRowCount(); i++) {
+			model.removeRow(0);
+		}
+	}
+	
+	private void cargarGuiasZonas() {
+		
+		try {
+			vaciarTabla(modelDist);
+			String idZona = BoxZonas.getSelectedItem().toString().split(" - ")[0];
+			ResultSet rs = FacadeGuia.getGuiasPorZona(idZona);
+			Boolean apuntador = rs.next();
+			if(apuntador==false) return;
+			else {
+				while(apuntador) {
+					String[] fila = new String[10];
+					for(int i=0;i<10;i++) {
+						fila[i] = rs.getString(i+1);
+					}
+					modelDist.addRow(fila);
+					apuntador = rs.next();
+				}
+				tablaDist.setModel(modelDist);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error: "+e.getMessage());
 		}
 	}
 
@@ -344,7 +395,6 @@ public class Principal extends JPanel {
 		subPanel.setBounds(27, 48, 644, 87);
 		panelGuia.add(subPanel);
 		subPanel.setLayout(null);
-		
 
 		lblNumeroGuia = new JLabel("N\u00FAmero gu\u00EDa");
 		lblNumeroGuia.setForeground(new Color(25, 25, 112));
@@ -590,9 +640,9 @@ public class Principal extends JPanel {
 		tabbedPane.setEnabledAt(2, true);
 		panelDistribucion.setLayout(null);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(189, 25, 123, 20);
-		panelDistribucion.add(comboBox);
+		BoxZonas = new JComboBox();
+		BoxZonas.setBounds(189, 25, 142, 20);
+		panelDistribucion.add(BoxZonas);
 
 		lblFiltrarGuiasPor = new JLabel("Filtrar gu\u00EDas por");
 		lblFiltrarGuiasPor.setForeground(new Color(25, 25, 112));
@@ -601,30 +651,11 @@ public class Principal extends JPanel {
 		panelDistribucion.add(lblFiltrarGuiasPor);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(57, 90, 581, 215);
+		scrollPane_1.setBounds(30, 90, 644, 215);
 		panelDistribucion.add(scrollPane_1);
-		
-		tablaDist = new JTable();
-		tablaDist.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"dd", "dd", "eeee"},
-				{"dsdsdwew", "wew", null},
-			},
-			new String[] {
-				"New ewe", "New column", "New column"
-			}
-		));
-		scrollPane_1.setViewportView(tablaDist);
 
-		btnSeleccionar_3 = new JButton("Seleccionar");
-		btnSeleccionar_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				filtrarGuiasDistribucion();
-			}
-		});
-		btnSeleccionar_3.setFont(new Font("Agency FB", Font.PLAIN, 20));
-		btnSeleccionar_3.setBounds(378, 24, 123, 23);
-		panelDistribucion.add(btnSeleccionar_3);
+		tablaDist = new JTable();
+		scrollPane_1.setViewportView(tablaDist);
 
 		JButton btnGenerarPdfDistribucion = new JButton("Generar PDF distribuci\u00F3n");
 		btnGenerarPdfDistribucion.addActionListener(new ActionListener() {
@@ -635,7 +666,7 @@ public class Principal extends JPanel {
 		btnGenerarPdfDistribucion.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnGenerarPdfDistribucion.setBounds(427, 316, 211, 37);
 		panelDistribucion.add(btnGenerarPdfDistribucion);
-		
+
 		JButton btnBuscarRuta = new JButton("Buscar ruta");
 		btnBuscarRuta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -645,7 +676,7 @@ public class Principal extends JPanel {
 		btnBuscarRuta.setFont(new Font("Agency FB", Font.PLAIN, 20));
 		btnBuscarRuta.setBounds(255, 327, 123, 23);
 		panelDistribucion.add(btnBuscarRuta);
-		
+
 		txtRuta = new JTextField();
 		txtRuta.setBounds(57, 328, 176, 20);
 		panelDistribucion.add(txtRuta);
@@ -770,6 +801,9 @@ public class Principal extends JPanel {
 		lblFondo.setIcon(new ImageIcon(Principal.class.getResource("/RecursosInterfaz/Fondo.png")));
 		lblFondo.setBounds(0, 0, 850, 530);
 		add(lblFondo);
+		
+		//se carga el combo box de las zonas en el panel distribuci�n
+		cargarBoxZonas();
 	}
 
 	public JButton getBtnGenerarGuiaFinal() {
@@ -922,5 +956,4 @@ public class Principal extends JPanel {
 		}
 
 	}
-
 }

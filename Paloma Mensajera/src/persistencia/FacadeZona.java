@@ -12,5 +12,10 @@ public class FacadeZona {
 		GestorZona gz = new GestorZona();
 		return gz.consultarZonas();
 	}
+	
+	public static ResultSet consultarTodasZonas() throws SQLException {
+		GestorZona gz = new GestorZona();
+		return gz.consultarTodasZonas();
+	}
 
 }

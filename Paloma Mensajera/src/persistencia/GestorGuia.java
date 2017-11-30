@@ -47,4 +47,15 @@ public class GestorGuia extends GestorTabla{
 		Statement declaracion = this.gestor.getConector().createStatement();
 		return declaracion.executeQuery(consulta);
 	}
+	
+	public ResultSet getGuiasPorZona(String idZona) throws SQLException {
+		String consulta = "select g.consecutivo,g.fecha_creacion,g.id_empleado || ' - ' || em.nombre_empleado || ' ' || em.apellido_uno, " + 
+				" g.id_aseguradora || ' - ' || a.nombre_aseguradora,d.peso,c.cedula_cliente || ' - ' || c.nombre_cliente || ' ' || c.apellido_uno,g.id_embalaje || ' ' || " + 
+				" e.nombre_embalaje, case when g.delicado = true then 'Si' else 'No' end, g.precio_total_envio,g.precio_total_envio+100000+(g.precio_total_envio)*0.19 from " + 
+				" guia g, empleado em, aseguradora a, detalle_orden_servicio d, cliente c, tipo_embalaje e, orden_servicio o where g.id_empleado = em.id_empleado and " + 
+				" g.id_aseguradora = a.id_aseguradora and e.id_embalaje = g.id_embalaje and g.item = d.item and g.id_orden_servicio = " + 
+				" d.id_orden_servicio and o.id_orden_servicio = d.id_orden_servicio and o.cedula_cliente = c.cedula_cliente and g.id_zona_entrega = '"+idZona+"';";
+		Statement declaracion = this.gestor.getConector().createStatement();
+		return declaracion.executeQuery(consulta);
+	}
 }

@@ -17,5 +17,12 @@ public class GestorZona extends GestorTabla{
 		Statement declaracion = this.gestor.getConector().createStatement();
 		return declaracion.executeQuery(consulta);
 	}
+	
+	public ResultSet consultarTodasZonas() throws SQLException {
+		String consulta ="select z.id_zona || ' - ' || z.nombre ||' (' || z1.nombre || ')' from zona z,zona z1 where "
+				+ " z.id_tipo_zona !='4' and z.id_zona_superior = z1.id_zona";
+		Statement declaracion = this.gestor.getConector().createStatement();
+		return declaracion.executeQuery(consulta);
+	}
 
 }
